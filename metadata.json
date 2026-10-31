@@ -1,0 +1,6 @@
+{
+  "name": "Derailleur v2 // ePidOS Terminal Handheld",
+  "description": "Tactile 80s rugged cyberdeck and interactive portfolio for 2d Lt Christian Chadwick running ePidOS by Chadhawk Corps.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derailleur v2 // ePidOS Terminal Handheld</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #0d0a04;
+            --text-color: #ffb000;
+            --text-dim: #9e6b00;
+            --accent-blue: #5bc0be;
+            --bezel-red: #b52b24;
+            --chassis-base: #8a877f;
+            --chassis-dark: #57544e;
+            --chassis-light: #a8a49b;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 36px 95px;
+            background-color: #09090b;
+            background-image: 
+                radial-gradient(circle at 50% 40%, #1c1917 0%, #060608 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Courier New", Courier, "Lucida Sans Typewriter", monospace;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Outer Rugged 80s Hardware Chassis (Wingman 2 / REPLACED style - Taller Handheld Proportions) */
+        #device-chassis {
+            position: relative;
+            width: 100%;
+            max-width: 740px;
+            height: 920px;
+            background: linear-gradient(135deg, var(--chassis-light) 0%, var(--chassis-base) 45%, #706e67 100%);
+            border-radius: 26px;
+            padding: 34px 46px 118px 42px;
+            box-shadow: 
+                0 35px 70px rgba(0,0,0,0.95),
+                inset 0 3px 5px rgba(255,255,255,0.45),
+                inset 0 -8px 16px rgba(0,0,0,0.7),
+                inset 0 0 45px rgba(45, 35, 25, 0.45);
+            border: 4px solid #3d3b37;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Worn, Beaten-Up Gritty Texture & Scratches Overlay */
+        #device-chassis::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+            pointer-events: none;
+            z-index: 3;
+            background-image: 
+                repeating-linear-gradient(115deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 9px),
+                repeating-linear-gradient(25deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 14px),
+                radial-gradient(circle at 12% 18%, rgba(30,25,20,0.35) 0%, transparent 18%),
+                radial-gradient(circle at 88% 82%, rgba(25,20,15,0.4) 0%, transparent 22%),
+                radial-gradient(circle at 82% 10%, rgba(0,0,0,0.28) 0%, transparent 12%);
+            mix-blend-mode: multiply;
+        }
+
+        /* Thick Distressed Red Racing/Industrial Stripe Around Bezel */
+        .red-frame-stripe {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            right: 16px;
+            bottom: 102px;
+            border: 6px solid var(--bezel-red);
+            border-radius: 16px;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.88;
+            box-shadow: 
+                inset 0 0 8px rgba(0,0,0,0.5),
+                0 1px 2px rgba(255,255,255,0.25);
+            mask-image: linear-gradient(160deg, #000 18%, rgba(0,0,0,0.65) 22%, #000 26%, #000 72%, rgba(0,0,0,0.55) 75%, #000 80%);
+        }
+
+        /* Top Bezel Etched Label */
+        .bezel-top-label {
+            position: absolute;
+            top: 17px;
+            right: 56px;
+            background: var(--chassis-base);
+            padding: 0 8px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #383530;
+            z-index: 4;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        /* Top Bezel Mechanical Controls (RESTART, DEGAUSS & POWER) */
+        .bezel-top-controls {
+            position: absolute;
+            top: 9px;
+            left: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--chassis-base);
+            padding: 2px 10px;
+            border-radius: 6px;
+            z-index: 6;
+        }
+
+        .hw-top-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(180deg, #4b4944 0%, #2b2927 100%);
+            border: 2px solid #1c1a18;
+            border-radius: 4px;
+            padding: 3px 9px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+            color: #d6d3cb;
+            cursor: pointer;
+            box-shadow: 
+                0 3px 0 #141311,
+                0 4px 5px rgba(0,0,0,0.55),
+                inset 0 1px 1px rgba(255,255,255,0.22);
+            transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.1s;
+            text-transform: uppercase;
+        }
+
+        .hw-top-btn:hover {
+            filter: brightness(1.12);
+        }
+
+        .hw-top-btn:active {
+            transform: translateY(2px);
+            box-shadow: 
+                0 1px 0 #141311,
+                0 2px 3px rgba(0,0,0,0.5),
+                inset 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .hw-top-btn.power-btn {
+            border-color: #4a1916;
+            background: linear-gradient(180deg, #69221d 0%, #3d120f 100%);
+            color: #ffd2cf;
+        }
+
+        .hw-top-btn .pwr-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #33ff66;
+            box-shadow: 0 0 6px #33ff66;
+        }
+
+        .hw-top-btn.power-btn.off-state .pwr-dot {
+            background: #ff2a1f;
+            box-shadow: 0 0 6px #ff2a1f;
+        }
+
+        .hw-top-btn.degauss-btn {
+            border-color: #2b3a42;
+            background: linear-gradient(180deg, #2d3e47 0%, #172126 100%);
+            color: #9cdbff;
+        }
+
+        /* CRT Power-Down Overlay Animation */
+        #crt-off-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #030303;
+            z-index: 55;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #crt-off-overlay.active {
+            display: flex;
+            animation: crt-fade-in 0.25s forwards;
+        }
+
+        .crt-beam {
+            width: 100%;
+            height: 3px;
+            background: #ffb000;
+            box-shadow: 0 0 18px #ffb000, 0 0 35px #ffffff;
+            animation: crt-collapse 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .crt-standby-hint {
+            margin-top: 18px;
+            font-size: 11px;
+            color: #5c461c;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: show-hint 0.4s 0.5s forwards;
+        }
+
+        @keyframes crt-collapse {
+            0% { transform: scaleX(1) scaleY(25); opacity: 1; }
+            50% { transform: scaleX(1) scaleY(1); opacity: 1; }
+            85% { transform: scaleX(0.02) scaleY(2); opacity: 1; }
+            100% { transform: scaleX(0) scaleY(0); opacity: 0; }
+        }
+
+        /* CRT Power-On / Startup Warm-Up Overlay */
+        #crt-on-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #030303;
+            z-index: 54;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        #crt-on-overlay.active {
+            display: flex;
+            animation: crt-on-backdrop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .crt-on-beam {
+            width: 100%;
+            height: 4px;
+            background: #fff3d1;
+            box-shadow: 0 0 25px #ffb000, 0 0 50px #ff8800, 0 0 90px #ffffff;
+            animation: crt-expand 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes crt-expand {
+            0% { transform: scaleX(0.01) scaleY(0.5); opacity: 1; }
+            35% { transform: scaleX(1) scaleY(1.2); opacity: 1; }
+            75% { transform: scaleX(1) scaleY(160); opacity: 0.9; }
+            100% { transform: scaleX(1) scaleY(260); opacity: 0; }
+        }
+
+        @keyframes crt-on-backdrop {
+            0%, 45% { background: #030303; opacity: 1; }
+            75% { background: rgba(255, 176, 0, 0.16); opacity: 0.8; }
+            100% { background: transparent; opacity: 0; }
+        }
+
+        /* CRT Magnetic Degauss Coil Distortion Animation */
+        #screen-bezel.degaussing #top-nav,
+        #screen-bezel.degaussing #terminal,
+        #screen-bezel.degaussing #editor-view {
+            animation: degauss-wave 0.95s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        #screen-bezel.degaussing::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(120, 255, 210, 0.28) 0%, rgba(255, 60, 180, 0.25) 45%, rgba(255, 176, 0, 0.2) 75%, transparent 100%);
+            z-index: 58;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: degauss-rainbow 0.95s ease-out forwards;
+        }
+
+        @keyframes degauss-wave {
+            0% {
+                transform: scale(1) skew(0deg, 0deg);
+                filter: none;
+            }
+            12% {
+                transform: scale(0.86, 1.14) skew(14deg, -5deg) translate(-12px, 6px);
+                filter: drop-shadow(-10px 0 0 rgba(255,0,90,0.85)) drop-shadow(10px 0 0 rgba(0,255,255,0.85)) hue-rotate(110deg) brightness(1.8);
+            }
+            26% {
+                transform: scale(1.12, 0.88) skew(-12deg, 4deg) translate(10px, -6px);
+                filter: drop-shadow(8px -4px 0 rgba(255,255,0,0.85)) drop-shadow(-8px 4px 0 rgba(140,0,255,0.85)) hue-rotate(-95deg) brightness(1.5);
+            }
+            42% {
+                transform: scale(0.95, 1.06) skew(7deg, -2deg) translate(-6px, 3px);
+                filter: drop-shadow(-5px 0 0 rgba(255,50,50,0.7)) drop-shadow(5px 0 0 rgba(0,220,255,0.7)) brightness(1.3);
+            }
+            58% {
+                transform: scale(1.03, 0.97) skew(-4deg, 1deg) translate(4px, -2px);
+                filter: drop-shadow(3px 0 0 rgba(255,176,0,0.6)) brightness(1.15);
+            }
+            76% {
+                transform: scale(0.99, 1.01) skew(1.5deg, 0deg) translate(-2px, 0);
+            }
+            100% {
+                transform: scale(1) skew(0deg, 0deg) translate(0, 0);
+                filter: none;
+            }
+        }
+
+        @keyframes degauss-rainbow {
+            0% { opacity: 0; transform: scale(0.5); }
+            15% { opacity: 1; transform: scale(1.25) rotate(12deg); }
+            45% { opacity: 0.7; transform: scale(0.9) rotate(-8deg); }
+            100% { opacity: 0; transform: scale(1.1) rotate(0deg); }
+        }
+
+        @keyframes show-hint {
+            to { opacity: 1; }
+        }
+
+        /* Deep Recessed Screen Bezel */
+        #screen-bezel {
+            position: relative;
+            flex: 1;
+            background: var(--bg-color);
+            border-radius: 12px;
+            border: 10px solid #2b2925;
+            box-shadow: 
+                inset 0 0 35px rgba(0,0,0,0.95),
+                inset 0 0 12px rgba(255, 176, 0, 0.12),
+                0 2px 3px rgba(255,255,255,0.35);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        /* CRT Scanline & Vignette Overlay */
+        #screen-bezel::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.32) 50%), 
+                radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.55) 100%);
+            background-size: 100% 4px, 100% 100%;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        /* Left Side Protruding Tape-Deck Mechanical Buttons */
+        .hw-buttons-left {
+            position: absolute;
+            left: -46px;
+            top: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .deck-btn {
+            position: relative;
+            width: 46px;
+            height: 88px;
+            background: linear-gradient(90deg, #3c3a36 0%, #636059 35%, #4a4742 100%);
+            border: 3px solid #262421;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            box-shadow: 
+                -6px 6px 12px rgba(0,0,0,0.7),
+                inset 2px 2px 3px rgba(255,255,255,0.25),
+                inset -4px -4px 8px rgba(0,0,0,0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.12s;
+            padding-right: 4px;
+        }
+
+        /* Tactile Ridges on Tape-Deck Buttons (Strictly scoped to each button) */
+        .deck-btn::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.25) 0px,
+                rgba(255,255,255,0.25) 2px,
+                rgba(0,0,0,0.5) 2px,
+                rgba(0,0,0,0.5) 4px
+            );
+            border-radius: 2px;
+        }
+
+        .deck-btn span {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #d6d3cb;
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.9);
+        }
+
+        .deck-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .deck-btn:active, .deck-btn.depressed {
+            transform: translateX(11px);
+            box-shadow: 
+                -2px 3px 5px rgba(0,0,0,0.8),
+                inset 2px 2px 5px rgba(0,0,0,0.7);
+            background: linear-gradient(90deg, #2e2c29 0%, #4d4a44 45%, #383531 100%);
+        }
+
+        .deck-btn.depressed span {
+            color: var(--text-color);
+            text-shadow: 0 0 6px rgba(255, 176, 0, 0.7);
+        }
+
+        /* Right Side Scroll Label & Recessed Half-Wheel */
+        .scroll-bezel-marker {
+            position: absolute;
+            right: 17px;
+            top: 44%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .scroll-bezel-marker .arrow-80s {
+            font-size: 10px;
+            color: #292724;
+            font-weight: 900;
+            line-height: 1;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        .scroll-bezel-marker .scroll-text {
+            writing-mode: vertical-rl;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            color: #292724;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        /* Side-Mounted Rotary Scroll Wheel (Balanced Elongated Curve) */
+        .wheel-recess-slot {
+            position: absolute;
+            right: -36px;
+            top: 44%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 104px;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        #scroll-wheel {
+            width: 72px;
+            height: 100px;
+            margin-left: -38px;
+            border-radius: 50px;
+            border: 3px solid #241d18;
+            background-color: #4a3525;
+            background-image: 
+                radial-gradient(circle at 55% 50%, rgba(255,200,150,0.22) 0%, transparent 60%, rgba(0,0,0,0.75) 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    #2a1e17 0px,
+                    #2a1e17 5px,
+                    #734f38 5px,
+                    #8c6246 8px,
+                    #38281e 8px,
+                    #38281e 12px
+                );
+            background-size: 100% 100%, 100% 24px;
+            box-shadow: 
+                4px 6px 14px rgba(0,0,0,0.85),
+                inset -4px 0 8px rgba(255,255,255,0.2),
+                inset 6px 0 12px rgba(0,0,0,0.85);
+            cursor: ns-resize;
+            transition: background-position 0.06s linear;
+        }
+
+        /* Bottom Hardware Bezel Panel (Branding, LED, Glass Flip Clock) */
+        .bottom-hardware-deck {
+            position: absolute;
+            bottom: 14px;
+            left: 38px;
+            right: 42px;
+            height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 6;
+            padding: 0 10px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(255,255,255,0.08) 100%);
+            border-top: 2px groove rgba(255,255,255,0.25);
+            border-radius: 8px;
+        }
+
+        .brand-cluster {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .derailleur-logo {
+            font-family: "Arial Black", Impact, sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: 2px;
+            color: #2b2926;
+            text-shadow: 
+                -1px -1px 0 rgba(0,0,0,0.6),
+                1px 1px 0 rgba(255,255,255,0.45);
+            transform: skewX(-12deg);
+            display: inline-block;
+            line-height: 1.05;
+        }
+
+        .derailleur-logo span {
+            color: var(--bezel-red);
+            font-size: 15px;
+            margin-left: 3px;
+        }
+
+        .corp-stamp {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+            color: #3a3733;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        /* Center Status LED Cluster */
+        .status-cluster {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #6e6b64;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 2px solid #4a4843;
+            box-shadow: 
+                inset 0 2px 5px rgba(0,0,0,0.6),
+                0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        .led-label {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: 1px;
+            color: #24221f;
+            text-align: right;
+        }
+
+        #status-led {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #292724;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        /* Glossy Dome Highlight on LED */
+        #status-led::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            width: 6px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.65);
+            transform: rotate(-25deg);
+        }
+
+        .led-offline {
+            background: radial-gradient(circle, #ff4d4d 10%, #a60000 85%);
+            box-shadow: 0 0 12px #ff1a1a, 0 0 22px rgba(255, 26, 26, 0.7), inset 0 0 4px #fff;
+            animation: blink-red 1s infinite ease-in-out;
+        }
+
+        .led-thinking {
+            background: radial-gradient(circle, #ffe066 10%, #cc8800 85%);
+            box-shadow: 0 0 14px #ffcc00, 0 0 24px rgba(255, 204, 0, 0.8), inset 0 0 4px #fff;
+            animation: blink-yellow 0.28s infinite alternate;
+        }
+
+        .led-online {
+            background: radial-gradient(circle, #66ff99 10%, #00802b 85%);
+            box-shadow: 0 0 12px #00e64d, 0 0 20px rgba(0, 230, 77, 0.65), inset 0 0 4px #fff;
+        }
+
+        .led-poweroff {
+            background: radial-gradient(circle, #2b1d1d 10%, #140d0d 85%);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
+        }
+
+        @keyframes blink-red {
+            0%, 100% { opacity: 1; box-shadow: 0 0 14px #ff1a1a, 0 0 26px rgba(255, 26, 26, 0.8); }
+            50% { opacity: 0.3; box-shadow: 0 0 3px #660000; }
+        }
+
+        @keyframes blink-yellow {
+            0% { opacity: 1; transform: scale(1.03); }
+            100% { opacity: 0.35; transform: scale(0.97); }
+        }
+
+        /* Bottom-Right Glass-Enclosed Old School Flip Clock Counter */
+        .flip-clock-glass-housing {
+            position: relative;
+            background: #171614;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 3px solid #383530;
+            box-shadow: 
+                inset 0 4px 10px rgba(0,0,0,0.95),
+                inset 0 -2px 4px rgba(255,255,255,0.12),
+                0 2px 2px rgba(255,255,255,0.35);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        /* Acrylic / Glass Enclosure Reflection Overlay */
+        .flip-clock-glass-housing::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                125deg,
+                rgba(255,255,255,0.32) 0%,
+                rgba(255,255,255,0.08) 28%,
+                transparent 32%,
+                transparent 68%,
+                rgba(255,255,255,0.1) 72%,
+                transparent 100%
+            );
+            border-radius: 5px;
+            pointer-events: none;
+            z-index: 6;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.45);
+        }
+
+        .flip-card {
+            position: relative;
+            background: linear-gradient(180deg, #2b2927 0%, #1c1b19 49%, #0d0c0b 50%, #242220 100%);
+            border: 1px solid #3d3a36;
+            border-radius: 4px;
+            padding: 4px 7px;
+            min-width: 34px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+            color: #e8e2d5;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* Horizontal Split-Flap Mechanical Line */
+        .flip-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1.5px;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.12);
+            z-index: 3;
+        }
+
+        .flip-card.amber-flap {
+            color: var(--text-color);
+        }
+
+        .flip-sep {
+            color: #787268;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* ==============================================================
+           TERMINAL SCREEN INTERNALS
+           ============================================================== */
+        #screen-inner {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 14px 18px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Top Navigation Bar inside Terminal (Strictly 1 line, no wrapping) */
+        #top-nav {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            border-bottom: 2px dashed #4a3508;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* Left: Operator Avatar + Dynamic URL */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-width: 0;
+            flex: 1 1 0%;
+            overflow: hidden;
+        }
+
+        .avatar-box {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--text-color);
+            background: #1f1705;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 13px;
+            color: var(--text-color);
+            flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(255, 176, 0, 0.25);
+        }
+
+        #nav-url {
+            font-weight: bold;
+            color: var(--text-color);
+            font-size: 10.5px;
+            letter-spacing: -0.4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Center: Action Buttons */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: #1c1506;
+            border: 1px solid var(--text-dim);
+            color: var(--text-color);
+            padding: 3px 5px;
+            font-size: 9.5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-transform: uppercase;
+        }
+
+        .nav-btn:hover, .nav-btn.active-nav {
+            background: var(--text-color);
+            color: #000 !important;
+            border-color: var(--text-color);
+            box-shadow: 0 0 8px rgba(255, 176, 0, 0.6);
+        }
+
+        /* Right: Hierarchy Folder Box */
+        .nav-tree {
+            border: 1px solid var(--text-dim);
+            background: rgba(25, 18, 4, 0.85);
+            padding: 4px 7px;
+            font-size: 10px;
+            line-height: 1.3;
+            min-width: 142px;
+            flex-shrink: 0;
+        }
+
+        .tree-item {
+            cursor: pointer;
+            padding: 1px 4px;
+            display: block;
+            color: var(--text-color);
+            transition: background 0.12s, color 0.12s;
+        }
+
+        .tree-item:hover {
+            background: rgba(255, 176, 0, 0.2);
+        }
+
+        .tree-folder {
+            font-weight: bold;
+        }
+
+        .tree-active {
+            background: var(--text-color) !important;
+            color: #000 !important;
+            font-weight: bold;
+        }
+
+        /* Main Scrollable Terminal Output Area */
+        #terminal {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 6px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-dim) #120d02;
+        }
+
+        #terminal::-webkit-scrollbar {
+            width: 6px;
+        }
+        #terminal::-webkit-scrollbar-track {
+            background: #120d02;
+        }
+        #terminal::-webkit-scrollbar-thumb {
+            background-color: var(--text-dim);
+        }
+
+        .line {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 2px;
+        }
+
+        /* Prompt Input Line */
+        #input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 6px;
+            padding-bottom: 8px;
+        }
+
+        #prompt-label {
+            color: var(--text-color);
+            font-weight: bold;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        #cmd-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 13.5px;
+            flex: 1;
+            caret-color: var(--text-color);
+        }
+
+        /* Linux ls directory blue coloring */
+        .ls-dir {
+            color: var(--accent-blue);
+        }
+
+        .ls-file {
+            color: var(--text-color);
+        }
+
+        /* Clickable Social ASCII Cards */
+        .social-link {
+            display: inline-block;
+            color: var(--text-color);
+            text-decoration: none;
+            border: 1px dashed var(--text-dim);
+            padding: 4px 10px;
+            margin: 4px 6px 4px 0;
+            background: rgba(255, 176, 0, 0.05);
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            background: var(--text-color);
+            color: #000;
+            border-style: solid;
+            box-shadow: 0 0 10px rgba(255, 176, 0, 0.5);
+        }
+
+        /* ==============================================================
+           VIM / NANO SIMULATED EDITOR OVERLAY
+           ============================================================== */
+        #editor-view {
+            display: none;
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 90px;
+            bottom: 14px;
+            background: #0d0a04;
+            border: 1px solid var(--text-dim);
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        #editor-top-status {
+            background: var(--text-color);
+            color: #000;
+            font-weight: bold;
+            font-size: 12.5px;
+            padding: 3px 10px;
+            display: flex;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        #editor-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 12px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-dim) #120d02;
+        }
+
+        #editor-status {
+            background: var(--text-color);
+            color: #000;
+            font-weight: bold;
+            font-size: 12.5px;
+            padding: 3px 10px;
+            display: flex;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .ascii-banner {
+            color: var(--text-color);
+            font-weight: bold;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 16px 48px;
+            }
+            #device-chassis {
+                height: 820px;
+                padding: 28px 30px 115px 28px;
+            }
+            .bottom-hardware-deck {
+                left: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body onclick="focusTerminalInput(event)">
+
+    <!-- 80s Rugged Hardware Deck Chassis -->
+    <div id="device-chassis">
+        
+        <!-- Distressed Red Bezel Striping -->
+        <div class="red-frame-stripe"></div>
+
+        <!-- Top Bezel Hardware Switches: RESTART, DEGAUSS & POWER -->
+        <div class="bezel-top-controls">
+            <button class="hw-top-btn" onclick="restartSystem()" title="Cold Reboot System">
+                <span>↻ RESTART</span>
+            </button>
+            <button class="hw-top-btn degauss-btn" onclick="triggerDegauss()" title="Demagnetize CRT Coil (Degauss)">
+                <span>🧲 DEGAUSS</span>
+            </button>
+            <button class="hw-top-btn power-btn" id="hw-pwr-btn" onclick="togglePower()" title="Toggle System Power">
+                <span class="pwr-dot"></span>
+                <span>POWER</span>
+            </button>
+        </div>
+
+        <div class="bezel-top-label">◢ VOL // CH-02</div>
+
+        <!-- Left Side Tape-Deck Physical Buttons (REW, PLAY, FFWD) -->
+        <div class="hw-buttons-left">
+            <button class="deck-btn" id="btn-rew" onclick="hwNavigate('rew')" title="Previous / Up Directory">
+                <span>◄◄ REW</span>
+            </button>
+            <button class="deck-btn" id="btn-play" onclick="hwNavigate('play')" title="Open / Action">
+                <span>► PLAY</span>
+            </button>
+            <button class="deck-btn" id="btn-ffwd" onclick="hwNavigate('ffwd')" title="Next / Enter Resume">
+                <span>►► FFWD</span>
+            </button>
+        </div>
+
+        <!-- Right Side Bezel 80s Arrow Markers & SCROLL Etching -->
+        <div class="scroll-bezel-marker">
+            <span class="arrow-80s">▲</span>
+            <span class="scroll-text">SCROLL</span>
+            <span class="arrow-80s">▼</span>
+        </div>
+
+        <!-- Right Side Protruding Semicircular Scroll Wheel -->
+        <div class="wheel-recess-slot" title="Scroll Terminal / Editor">
+            <div id="scroll-wheel"></div>
+        </div>
+
+        <!-- Recessed CRT Screen Bezel -->
+        <div id="screen-bezel">
+            <div id="screen-inner">
+                
+                <!-- Top Navigation Bar (Left: Avatar/URL, Center: Buttons, Right: Tree) -->
+                <div id="top-nav">
+                    <div class="nav-left">
+                        <div class="avatar-box" id="avatar-box">λ</div>
+                        <span id="nav-url">derailleur://epidos/~</span>
+                    </div>
+
+                    <div class="nav-links">
+                        <button class="nav-btn" id="nav-btn-about" onclick="quickCommand('cd ~/about && ls')">ABOUT</button>
+                        <button class="nav-btn" id="nav-btn-resume" onclick="quickCommand('cd ~/resume && ls')">RESUME</button>
+                        <button class="nav-btn" id="nav-btn-projects" onclick="quickCommand('cd ~/projects && ls')">PROJECTS</button>
+                        <button class="nav-btn" id="nav-btn-contact" onclick="quickCommand('cd ~/contact && ls')">CONTACT</button>
+                        <button class="nav-btn" id="nav-btn-clear" onclick="quickCommand('clear')">CLEAR</button>
+                    </div>
+
+                    <div class="nav-tree" id="nav-tree"></div>
+                </div>
+
+                <!-- Scrollable Terminal Stream -->
+                <div id="terminal">
+                    <div id="output"></div>
+                    <div id="input-line">
+                        <span id="prompt-label">login as:</span>
+                        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus />
+                    </div>
+                </div>
+
+                <!-- Simulated Vim / Nano Text Editor -->
+                <div id="editor-view">
+                    <div id="editor-top-status">
+                        <span id="editor-app-title">VIM - Vi IMproved 8.2</span>
+                        <span id="editor-top-file">File: about_me.txt</span>
+                    </div>
+                    <div id="editor-content"></div>
+                    <div id="editor-status">
+                        <span id="editor-bottom-file">"about_me.txt" [Readonly]</span>
+                        <span>Press ESC or type :q to exit</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CRT Power-On Startup Warm-Up Overlay -->
+            <div id="crt-on-overlay">
+                <div class="crt-on-beam"></div>
+            </div>
+
+            <!-- CRT Power-Off Screen Overlay -->
+            <div id="crt-off-overlay">
+                <div class="crt-beam"></div>
+                <div class="crt-standby-hint">[ SYSTEM POWERED OFF — PRESS POWER OR RESTART TO WAKE ]</div>
+            </div>
+        </div>
+
+        <!-- Bottom Hardware Bezel Panel -->
+        <div class="bottom-hardware-deck">
+            <div class="brand-cluster">
+                <div class="derailleur-logo">DERAILLEUR<span>v2</span></div>
+                <div class="corp-stamp">PRODUCED BY CHADWICK CORPS.</div>
+            </div>
+
+            <div class="status-cluster">
+                <div class="led-label">SYS<br>LINK</div>
+                <div id="status-led" class="led-offline" title="System Status Indicator"></div>
+            </div>
+
+            <!-- Bottom-Right Glass-Enclosed Flip Clock Counter -->
+            <div class="flip-clock-glass-housing" title="Hardware Split-Flap Clock">
+                <div class="flip-card amber-flap" id="flip-mon">OCT</div>
+                <div class="flip-card" id="flip-day">30</div>
+                <span class="flip-sep">:</span>
+                <div class="flip-card" id="flip-hr">18</div>
+                <span class="flip-sep">:</span>
+                <div class="flip-card" id="flip-min">49</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================================================
+        // FILESYSTEM & ASCII ART CONTENT (Flush Left for Clean Vim/Cat Display)
+        // =========================================================================
+        const fileSystem = {
+            "~": {
+                folders: ["about", "resume", "projects", "contact"],
+                files: {}
+            },
+            "~/about": {
+                folders: [],
+                files: {
+                    "about_me.txt": 
+`<div class="ascii-banner"> █████╗ ██████╗  ██████╗██╗  ██╗██╗████████╗███████╗ ██████╗████████╗
+██╔══██╗██╔══██╗██╔════╝██║  ██║██║╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝
+███████║██████╔╝██║     ███████║██║   ██║   █████╗  ██║        ██║   
+██╔══██║██╔══██╗██║     ██╔══██║██║   ██║   ██╔══╝  ██║        ██║   
+██║  ██║██║  ██║╚██████╗██║  ██║██║   ██║   ███████╗╚██████╗   ██║   
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝ ╚═════╝   ╚═╝</div>
+================================================================
+ARCHITECT: Christian J. Chadwick // Systems & Creative Technologist
+================================================================
+
+Welcome to the Derailleur v2 personal cyberdeck terminal.
+I build resilient infrastructure, interactive tooling, and creative
+hardware/software experiences inspired by retro-futurism and clean
+Unix design principles.
+
+• Focus Areas : Systems Architecture, Full-Stack Engineering, Automation
+• Philosophy  : Build tools that feel tactile, fast, and indestructible.
+• Navigation  : Type 'cd ~/resume' or click the hierarchy tree on the top right.`
+                }
+            },
+            "~/resume": {
+                folders: [],
+                files: {
+                    "experience.txt": 
+`<div class="ascii-banner">███████╗██╗  ██╗██████╗ ███████╗██████╗ ██╗███████╗███╗   ██╗ ██████╗███████╗
+██╔════╝╚██╗██╔╝██╔══██╗██╔════╝██╔══██╗██║██╔════╝████╗  ██║██╔════╝██╔════╝
+█████╗   ╚███╔╝ ██████╔╝█████╗  ██████╔╝██║█████╗  ██╔██╗ ██║██║     █████╗  
+██╔══╝   ██╔██╗ ██╔═══╝ ██╔══╝  ██╔══██╗██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+███████╗██╔╝ ██╗██║     ███████╗██║  ██║██║███████╗██║ ╚████║╚██████╗███████╗
+╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝</div>
+================================================================
+PROFESSIONAL EXPERIENCE LOG
+================================================================
+
+[2022 - PRESENT] :: Senior Systems & Software Engineer
+• Designed and deployed high-availability cloud and edge applications.
+• Automated deployment pipelines and observability dashboards.
+• Led cross-functional engineering initiatives with zero-downtime migrations.
+
+[2019 - 2022] :: Systems & Network Technologist
+• Engineered secure Linux environments, virtualization clusters, and tooling.
+• Reduced incident response times through custom diagnostic scripts.`,
+
+                    "education.txt": 
+`<div class="ascii-banner">███████╗██████╗ ██╗   ██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+█████╗  ██║  ██║██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██╔══╝  ██║  ██║██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+███████╗██████╔╝╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+╚══════╝╚═════╝  ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝</div>
+================================================================
+ACADEMIC & CERTIFICATION ARCHIVE
+================================================================
+
+• B.S. in Computer Science & Information Systems
+  Focus: Distributed Computing, Operating Systems, Network Security
+
+• Ongoing Research & Lab Work
+  Embedded Linux Handhelds, Retro CRT Hardware Interfacing, DevOps Tooling`,
+
+                    "skills.txt": 
+`<div class="ascii-banner">███████╗██╗  ██╗██╗██╗     ██╗     ███████╗
+██╔════╝██║ ██╔╝██║██║     ██║     ██╔════╝
+███████╗█████╔╝ ██║██║     ██║     ███████╗
+╚════██║██╔═██╗ ██║██║     ██║     ╚════██║
+███████║██║  ██╗██║███████╗███████╗███████║
+╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚══════╝</div>
+================================================================
+TECHNICAL CAPABILITIES MATRIX
+================================================================
+
+• Languages  : TypeScript/JavaScript, Python, Bash, Go, C/C++, SQL
+• Systems    : Linux (Debian/Arch), Docker, Kubernetes, Terraform, Git
+• Frontend   : HTML5/CSS3, React, Canvas/WebGL, Retro UI/UX Engineering
+• Hardware   : Raspberry Pi, Microcontroller Prototyping, Serial Comms`
+                }
+            },
+            "~/projects": {
+                folders: [],
+                files: {
+                    "README.txt": 
+`<div class="ascii-banner">██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝</div>
+================================================================
+CHADWICK CORPS // EXPERIMENTAL PROJECT LABS
+================================================================
+
+[ STATUS: ARCHIVE ENCRYPTED // COMING SOON... ]
+
+New hardware decks, interactive simulations, and systems builds are currently
+being cataloged for public release. Stay tuned!`
+                }
+            },
+            "~/contact": {
+                folders: [],
+                files: {
+                    "contact_me.txt": 
+`<div class="ascii-banner"> ██████╗ ██████╗ ███╗   ██╗████████╗ █████╗  ██████╗████████╗
+██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝
+██║     ██║   ██║██╔██╗ ██║   ██║   ███████║██║        ██║   
+██║     ██║   ██║██║╚██╗██║   ██║   ██╔══██║██║        ██║   
+╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║  ██║╚██████╗   ██║   
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝   ╚═╝</div>
+================================================================
+DIRECT TRANSMISSION CHANNELS (CLICK BADGE TO CONNECT)
+================================================================
+
+Select a frequency below to open a direct external transmission:
+
+<a class="social-link" href="https://www.instagram.com/christian.j.chadwick/" target="_blank" rel="noopener noreferrer">[ 📷 ] INSTAGRAM // @christian.j.chadwick</a>
+<a class="social-link" href="https://www.facebook.com/christian.j.chadwick" target="_blank" rel="noopener noreferrer">[ f ] FACEBOOK  // Christian J. Chadwick</a>
+<a class="social-link" href="https://www.youtube.com/channel/UCtkKmGziodoO6hJ0sYuD0-w" target="_blank" rel="noopener noreferrer">[ ▶ ] YOUTUBE   // Official Channel</a>
+
+----------------------------------------------------------------
+Status: Transceivers active and monitoring incoming packets.`
+                }
+            }
+        };
+
+        // =========================================================================
+        // STATE VARIABLES
+        // =========================================================================
+        let isLoggedIn = false;
+        let isAuthenticating = false;
+        let isPoweredOn = true;
+        let operatorName = "guest";
+        let currentDir = "~";
+        let activeFile = null;
+        let editorOpen = false;
+        let wheelRotation = 0;
+
+        const outputEl = document.getElementById('output');
+        const terminalEl = document.getElementById('terminal');
+        const inputLineEl = document.getElementById('input-line');
+        const promptLabelEl = document.getElementById('prompt-label');
+        const cmdInputEl = document.getElementById('cmd-input');
+        const navUrlEl = document.getElementById('nav-url');
+        const navTreeEl = document.getElementById('nav-tree');
+        const avatarBoxEl = document.getElementById('avatar-box');
+        const statusLedEl = document.getElementById('status-led');
+        const scrollWheelEl = document.getElementById('scroll-wheel');
+        const editorViewEl = document.getElementById('editor-view');
+        const editorContentEl = document.getElementById('editor-content');
+        const editorAppTitleEl = document.getElementById('editor-app-title');
+        const editorTopFileEl = document.getElementById('editor-top-file');
+        const editorBottomFileEl = document.getElementById('editor-bottom-file');
+        const crtOffOverlayEl = document.getElementById('crt-off-overlay');
+        const crtOnOverlayEl = document.getElementById('crt-on-overlay');
+        const screenBezelEl = document.getElementById('screen-bezel');
+        const hwPwrBtnEl = document.getElementById('hw-pwr-btn');
+
+        // =========================================================================
+        // CRT POWER-ON ANIMATION & DEGAUSS COIL DISCHARGE
+        // =========================================================================
+        function playCrtPowerOnAnimation() {
+            if (!crtOnOverlayEl) return;
+            crtOnOverlayEl.classList.remove('active');
+            void crtOnOverlayEl.offsetWidth;
+            crtOnOverlayEl.classList.add('active');
+            setTimeout(() => {
+                crtOnOverlayEl.classList.remove('active');
+            }, 680);
+        }
+
+        function triggerDegauss() {
+            if (!isPoweredOn) return;
+            screenBezelEl.classList.remove('degaussing');
+            void screenBezelEl.offsetWidth;
+            screenBezelEl.classList.add('degaussing');
+            setTimeout(() => {
+                screenBezelEl.classList.remove('degaussing');
+            }, 980);
+        }
+
+        // =========================================================================
+        // HARDWARE FLIP CLOCK UPDATER
+        // =========================================================================
+        function updateFlipClock() {
+            if (!isPoweredOn) return;
+            const now = new Date();
+            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            document.getElementById('flip-mon').textContent = months[now.getMonth()];
+            document.getElementById('flip-day').textContent = String(now.getDate()).padStart(2, '0');
+            document.getElementById('flip-hr').textContent = String(now.getHours()).padStart(2, '0');
+            document.getElementById('flip-min').textContent = String(now.getMinutes()).padStart(2, '0');
+        }
+        updateFlipClock();
+        setInterval(updateFlipClock, 10000);
+
+        // =========================================================================
+        // HARDWARE TOP BEZEL CONTROLS: RESTART & POWER
+        // =========================================================================
+        function restartSystem() {
+            if (!isPoweredOn) {
+                togglePower();
+            }
+            if (editorOpen) {
+                closeEditor();
+            }
+            isLoggedIn = false;
+            isAuthenticating = false;
+            operatorName = "guest";
+            currentDir = "~";
+            activeFile = null;
+            avatarBoxEl.textContent = "λ";
+            promptLabelEl.textContent = "login as:";
+            cmdInputEl.value = "";
+            inputLineEl.style.display = "flex";
+            updateNavAndTree();
+            initBootScreen();
+            cmdInputEl.focus();
+        }
+
+        function togglePower() {
+            isPoweredOn = !isPoweredOn;
+            if (!isPoweredOn) {
+                if (editorOpen) closeEditor();
+                crtOffOverlayEl.classList.add('active');
+                hwPwrBtnEl.classList.add('off-state');
+                statusLedEl.className = 'led-poweroff';
+                document.getElementById('flip-mon').textContent = "--";
+                document.getElementById('flip-day').textContent = "--";
+                document.getElementById('flip-hr').textContent = "--";
+                document.getElementById('flip-min').textContent = "--";
+                try { window.close(); } catch (e) {}
+            } else {
+                crtOffOverlayEl.classList.remove('active');
+                hwPwrBtnEl.classList.remove('off-state');
+                setLedStatus(isLoggedIn ? 'online' : 'offline');
+                updateFlipClock();
+                playCrtPowerOnAnimation();
+                cmdInputEl.focus();
+            }
+        }
+
+        // =========================================================================
+        // LED INDICATOR HELPER
+        // =========================================================================
+        function setLedStatus(state) {
+            statusLedEl.className = '';
+            if (state === 'offline') statusLedEl.classList.add('led-offline');
+            else if (state === 'thinking') statusLedEl.classList.add('led-thinking');
+            else if (state === 'online') statusLedEl.classList.add('led-online');
+        }
+
+        // =========================================================================
+        // HARDWARE BUTTON DEPRESS ANIMATION & NAVIGATION
+        // =========================================================================
+        function pulseHardwareButton(btnId) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.classList.add('depressed');
+            setTimeout(() => btn.classList.remove('depressed'), 220);
+        }
+
+        const folderOrder = ["~", "~/about", "~/resume", "~/projects", "~/contact"];
+
+        function hwNavigate(action) {
+            if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
+            if (action === 'rew') {
+                pulseHardwareButton('btn-rew');
+                if (editorOpen) {
+                    closeEditor();
+                } else {
+                    const idx = folderOrder.indexOf(currentDir);
+                    const prevIdx = idx <= 0 ? folderOrder.length - 1 : idx - 1;
+                    quickCommand(`cd ${folderOrder[prevIdx]} && ls`);
+                }
+            } else if (action === 'ffwd') {
+                pulseHardwareButton('btn-ffwd');
+                if (editorOpen) closeEditor();
+                const idx = folderOrder.indexOf(currentDir);
+                const nextIdx = (idx + 1) % folderOrder.length;
+                quickCommand(`cd ${folderOrder[nextIdx]} && ls`);
+            } else if (action === 'play') {
+                pulseHardwareButton('btn-play');
+                if (editorOpen) {
+                    closeEditor();
+                } else {
+                    const files = Object.keys(fileSystem[currentDir].files);
+                    if (files.length > 0) {
+                        quickCommand(`vim ${files[0]}`);
+                    } else {
+                        quickCommand('cd ~/about && vim about_me.txt');
+                    }
+                }
+            }
+        }
+
+        // =========================================================================
+        // SCROLL WHEEL ROTATION SYNC (Terminal + Vim + Drag/Wheel)
+        // =========================================================================
+        function rotateHardwareWheel(deltaY) {
+            wheelRotation += deltaY * 0.35;
+            scrollWheelEl.style.backgroundPosition = `0px ${wheelRotation}px`;
+        }
+
+        terminalEl.addEventListener('scroll', () => {
+            rotateHardwareWheel(4);
+        });
+
+        editorContentEl.addEventListener('scroll', () => {
+            rotateHardwareWheel(4);
+        });
+
+        window.addEventListener('wheel', (e) => {
+            rotateHardwareWheel(e.deltaY * 0.25);
+            if (editorOpen) {
+                editorContentEl.scrollTop += e.deltaY * 0.5;
+            }
+        }, { passive: true });
+
+        scrollWheelEl.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const target = editorOpen ? editorContentEl : terminalEl;
+            target.scrollTop += e.deltaY;
+            rotateHardwareWheel(e.deltaY * 0.4);
+        });
+
+        // =========================================================================
+        // TOP NAVBAR & LAMBDA FILE TREE RENDERER
+        // =========================================================================
+        function updateNavAndTree() {
+            const pathSuffix = currentDir === "~" ? "~" : currentDir;
+            navUrlEl.textContent = `derailleur://epidos/${pathSuffix}`;
+
+            // Update Top-Center Navbar Active Highlighting
+            const navButtons = ['about', 'resume', 'projects', 'contact', 'clear'];
+            navButtons.forEach(id => {
+                const el = document.getElementById(`nav-btn-${id}`);
+                if (el) el.classList.remove('active-nav');
+            });
+
+            if (currentDir === "~/about" || activeFile === "about_me.txt") {
+                document.getElementById('nav-btn-about')?.classList.add('active-nav');
+            } else if (currentDir === "~/resume" || ["experience.txt", "education.txt", "skills.txt"].includes(activeFile)) {
+                document.getElementById('nav-btn-resume')?.classList.add('active-nav');
+            } else if (currentDir === "~/projects" || activeFile === "README.txt") {
+                document.getElementById('nav-btn-projects')?.classList.add('active-nav');
+            } else if (currentDir === "~/contact" || activeFile === "contact_me.txt") {
+                document.getElementById('nav-btn-contact')?.classList.add('active-nav');
+            }
+
+            // Build right-side folder hierarchy with small λ symbol on every line
+            let html = '';
+            const isRootActive = (currentDir === "~" && !activeFile) ? 'tree-active' : '';
+            html += `<div class="tree-item tree-folder ${isRootActive}" onclick="treeClickDir('~')">λ ~/</div>`;
+
+            const folders = [
+                { dir: "~/about", name: "about/" },
+                { dir: "~/resume", name: "resume/" },
+                { dir: "~/projects", name: "projects/" },
+                { dir: "~/contact", name: "contact/" }
+            ];
+
+            folders.forEach(f => {
+                const isFolderSelected = (currentDir === f.dir && !activeFile) ? 'tree-active' : '';
+                html += `<div class="tree-item tree-folder ${isFolderSelected}" onclick="treeClickDir('${f.dir}')">λ ├─ ${f.name}</div>`;
+
+                if (currentDir === f.dir) {
+                    const folderFiles = Object.keys(fileSystem[f.dir].files);
+                    folderFiles.forEach((file, idx) => {
+                        const branch = (idx === folderFiles.length - 1) ? '└─' : '├─';
+                        const isActive = (activeFile === file) ? 'tree-active' : '';
+                        html += `<div class="tree-item ${isActive}" onclick="treeClickFile('${f.dir}', '${file}')">λ │  ${branch} ${file}</div>`;
+                    });
+                }
+            });
+
+            navTreeEl.innerHTML = html;
+        }
+
+        function treeClickDir(targetDir) {
+            if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
+            if (editorOpen) closeEditor();
+            quickCommand(`cd ${targetDir}`);
+        }
+
+        function treeClickFile(folderPath, fileName) {
+            if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
+            if (editorOpen) closeEditor();
+            if (currentDir !== folderPath) {
+                currentDir = folderPath;
+            }
+            quickCommand(`vim ${fileName}`);
+        }
+
+        // =========================================================================
+        // TERMINAL OUTPUT HELPERS
+        // =========================================================================
+        function printLine(htmlContent, className = "") {
+            const div = document.createElement('div');
+            div.className = `line ${className}`.trim();
+            div.innerHTML = htmlContent;
+            outputEl.appendChild(div);
+            terminalEl.scrollTop = terminalEl.scrollHeight;
+            return div;
+        }
+
+        function printHelpBlock() {
+            printLine("--- ePidOS Terminal Handheld Help ---");
+            printLine("-   ls                List files in current directory");
+            printLine("-   cd [dir]          Change directory (~, about, resume, projects, contact)");
+            printLine("-   cat [file]        Print file content to terminal");
+            printLine("-   vim / nano [file] Open file in interactive text editor");
+            printLine("-   degauss           Demagnetize CRT display coil");
+            printLine("-   pwd               Print working directory path");
+            printLine("-   clear             Clear terminal display");
+            printLine("----------------------------------------------------------------");
+        }
+
+        // =========================================================================
+        // INITIAL BOOT & NEOFETCH OPERATOR LOGIN SEQUENCE
+        // =========================================================================
+        function initBootScreen() {
+            playCrtPowerOnAnimation();
+            outputEl.innerHTML = "";
+            setLedStatus('offline');
+            printLine("DERAILLEUR v2 // BIOS REV 4.09 (C) CHADWICK CORPS.");
+            printLine("Checking 640K Low-Power CMOS RAM... OK");
+            printLine("Mounting /dev/epidos0 on / ... READONLY");
+            printLine("----------------------------------------------------------------");
+            printLine("Enter operator handle to initialize session:");
+            updateNavAndTree();
+        }
+
+        async function handleOperatorLogin(nameInput) {
+            isAuthenticating = true;
+            operatorName = (nameInput.trim() || "operator").toLowerCase().replace(/\s+/g, '_');
+            avatarBoxEl.textContent = operatorName.charAt(0).toUpperCase();
+            inputLineEl.style.display = "none";
+            setLedStatus('thinking');
+
+            const authLine = printLine("Authenticating operator credentials... /");
+            printLine("----------------------------------------------------------------");
+            const spinnerFrames = ["/", "-", "\\", "|"];
+            let frameIdx = 0;
+            const spinnerTimer = setInterval(() => {
+                frameIdx = (frameIdx + 1) % spinnerFrames.length;
+                authLine.textContent = `Authenticating operator credentials... ${spinnerFrames[frameIdx]}`;
+            }, 120);
+
+            // Fetch live operator location & weather cleanly with strict fallback
+            let locationText = "Philadelphia, Pennsylvania";
+            let weatherText = "58°F, Clear (Coffee Mode)";
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1600);
+                const geoRes = await fetch("https://ipapi.co/json/", { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (geoRes.ok) {
+                    const geoData = await geoRes.json();
+                    if (geoData.city && geoData.region) {
+                        locationText = `${geoData.city}, ${geoData.region}`;
+                    }
+                }
+            } catch (e) {
+                // Keep default fallback
+            }
+
+            try {
+                const controller2 = new AbortController();
+                const timeoutId2 = setTimeout(() => controller2.abort(), 1600);
+                const wttrRes = await fetch("https://wttr.in/?format=%t,+%C", { signal: controller2.signal });
+                clearTimeout(timeoutId2);
+                if (wttrRes.ok) {
+                    const rawWeather = await wttrRes.text();
+                    const cleaned = rawWeather
+                        .replace(/<[^>]*>/g, '')
+                        .replace(/[^\x20-\x7E°]/g, '')
+                        .trim();
+                    if (cleaned && cleaned.length < 42 && !cleaned.toLowerCase().includes("error") && !cleaned.toLowerCase().includes("html")) {
+                        weatherText = `${cleaned} (Coffee Mode)`;
+                    }
+                }
+            } catch (e) {
+                // Keep default fallback
+            }
+
+            setTimeout(() => {
+                clearInterval(spinnerTimer);
+                authLine.textContent = "Authenticating operator credentials...";
+
+                const nowStr = new Date().toLocaleString();
+
+                // Empty line before operator block
+                printLine("&nbsp;");
+                printLine(`λ Operator: ${operatorName}`);
+                printLine(`λ Host: Derailleur v2 Handheld`);
+                printLine(`λ Time: ${nowStr}`);
+                printLine(`λ Location: ${locationText}`);
+                printLine(`λ Weather: ${weatherText}`);
+                printLine(`λ Status: Online`);
+                printLine("&nbsp;");
+                printLine("----------------------------------------------------------------");
+                printHelpBlock();
+
+                isAuthenticating = false;
+                isLoggedIn = true;
+                setLedStatus('online');
+                updatePromptLabel();
+                inputLineEl.style.display = "flex";
+                cmdInputEl.focus();
+            }, 900);
+        }
+
+        function updatePromptLabel() {
+            promptLabelEl.textContent = `${operatorName}@derailleur:${currentDir}$`;
+            updateNavAndTree();
+        }
+
+        // =========================================================================
+        // FILENAME RESOLVER (Handles about.txt / about-me.txt / about_me.txt)
+        // =========================================================================
+        function resolveFileName(inputName, dirObj) {
+            if (!inputName) return null;
+            const clean = inputName.trim();
+            if (dirObj.files[clean]) return clean;
+
+            const normalized = clean.toLowerCase().replace(/-/g, '_');
+            const withTxt = normalized.endsWith('.txt') ? normalized : `${normalized}.txt`;
+            if (dirObj.files[withTxt]) return withTxt;
+
+            if (clean.toLowerCase().startsWith('about') && dirObj.files['about_me.txt']) return 'about_me.txt';
+            if ((clean.toLowerCase().startsWith('contact') || clean.toLowerCase().startsWith('comm')) && dirObj.files['contact_me.txt']) return 'contact_me.txt';
+            if (clean.toLowerCase().startsWith('readme') && dirObj.files['README.txt']) return 'README.txt';
+
+            return null;
+        }
+
+        // =========================================================================
+        // SIMULATED VIM / NANO TEXT EDITOR
+        // =========================================================================
+        function openEditor(appType, fileName, fileContent) {
+            editorOpen = true;
+            activeFile = fileName;
+            updateNavAndTree();
+
+            if (appType === 'nano') {
+                editorAppTitleEl.textContent = "GNU nano 6.2 // Derailleur v2";
+                editorStatusHint("Press ESC or Ctrl+X to exit");
+            } else {
+                editorAppTitleEl.textContent = "VIM - Vi IMproved 8.2 // Derailleur v2";
+                editorStatusHint("Press ESC or type :q to exit");
+            }
+
+            editorTopFileEl.textContent = `File: ${fileName}`;
+            editorBottomFileEl.textContent = `"${fileName}" [Readonly]`;
+            editorContentEl.innerHTML = fileContent;
+
+            editorViewEl.style.display = "flex";
+            editorContentEl.scrollTop = 0;
+        }
+
+        function editorStatusHint(text) {
+            editorViewEl.querySelector('#editor-status span:last-child').textContent = text;
+        }
+
+        function closeEditor() {
+            editorOpen = false;
+            activeFile = null;
+            editorViewEl.style.display = "none";
+            updateNavAndTree();
+            cmdInputEl.focus();
+        }
+
+        // =========================================================================
+        // COMMAND PARSER & EXECUTION
+        // =========================================================================
+        function executeSingleCommand(rawCmd) {
+            const trimmed = rawCmd.trim();
+            if (!trimmed) return;
+
+            const parts = trimmed.split(/\s+/);
+            const cmd = parts[0].toLowerCase();
+            const arg = parts.slice(1).join(" ");
+
+            const dirObj = fileSystem[currentDir];
+
+            if (cmd === "help") {
+                printHelpBlock();
+                return;
+            }
+
+            if (cmd === "degauss") {
+                triggerDegauss();
+                printLine("[CRT COIL] :: Magnetic degaussing pulse discharged.");
+                return;
+            }
+
+            if (cmd === "reboot" || cmd === "restart") {
+                restartSystem();
+                return;
+            }
+
+            if (cmd === "clear") {
+                outputEl.innerHTML = "";
+                activeFile = null;
+                updateNavAndTree();
+                return;
+            }
+
+            if (cmd === "pwd") {
+                const fullPath = currentDir.replace("~", `/home/${operatorName}`);
+                printLine(fullPath);
+                return;
+            }
+
+            if (cmd === "ls") {
+                let items = [];
+                dirObj.folders.forEach(f => {
+                    items.push(`<span class="ls-dir">${f}/</span>`);
+                });
+                Object.keys(dirObj.files).forEach(file => {
+                    items.push(`<span class="ls-file">${file}</span>`);
+                });
+                printLine(items.join("    "));
+                return;
+            }
+
+            if (cmd === "cd") {
+                activeFile = null;
+                const cleanArg = (arg || "~").replace(/\/+$/, "");
+                if (!cleanArg || cleanArg === "~" || cleanArg === "/" || cleanArg === "..") {
+                    if (currentDir !== "~") pulseHardwareButton('btn-rew');
+                    currentDir = "~";
+                    updatePromptLabel();
+                } else {
+                    const folderKey = cleanArg.startsWith("~/") ? cleanArg : `~/${cleanArg.replace(/^\.\//, "")}`;
+                    if (fileSystem[folderKey]) {
+                        pulseHardwareButton('btn-ffwd');
+                        currentDir = folderKey;
+                        updatePromptLabel();
+                    } else {
+                        printLine(`bash: cd: ${arg}: No such directory`);
+                    }
+                }
+                return;
+            }
+
+            if (cmd === "cat") {
+                if (!arg) {
+                    printLine("usage: cat [filename]");
+                    return;
+                }
+                let targetDirObj = dirObj;
+                let fileQuery = arg;
+
+                // Allow cross-folder paths or root shortcuts
+                if (arg.includes("/")) {
+                    const segs = arg.split("/");
+                    fileQuery = segs.pop();
+                    const folderName = segs.pop();
+                    if (fileSystem[`~/${folderName}`]) {
+                        targetDirObj = fileSystem[`~/${folderName}`];
+                    }
+                }
+
+                const resolved = resolveFileName(fileQuery, targetDirObj);
+                if (resolved) {
+                    pulseHardwareButton('btn-play');
+                    activeFile = resolved;
+                    updateNavAndTree();
+                    printLine(targetDirObj.files[resolved]);
+                } else {
+                    printLine(`cat: ${arg}: No such file in ${currentDir}`);
+                }
+                return;
+            }
+
+            if (cmd === "vim" || cmd === "vi" || cmd === "nano") {
+                if (!arg) {
+                    printLine(`usage: ${cmd} [filename]`);
+                    return;
+                }
+                let targetDirObj = dirObj;
+                let fileQuery = arg;
+
+                if (arg.includes("/")) {
+                    const segs = arg.split("/");
+                    fileQuery = segs.pop();
+                    const folderName = segs.pop();
+                    if (fileSystem[`~/${folderName}`]) {
+                        currentDir = `~/${folderName}`;
+                        targetDirObj = fileSystem[currentDir];
+                        updatePromptLabel();
+                    }
+                }
+
+                const resolved = resolveFileName(fileQuery, targetDirObj);
+                if (resolved) {
+                    pulseHardwareButton('btn-play');
+                    openEditor(cmd === "nano" ? "nano" : "vim", resolved, targetDirObj.files[resolved]);
+                } else {
+                    printLine(`${cmd}: ${arg}: No such file in ${currentDir}`);
+                }
+                return;
+            }
+
+            printLine(`bash: ${cmd}: command not found (type 'help' for commands)`);
+        }
+
+        function handleCommandLine(fullInput) {
+            printLine(`${promptLabelEl.textContent} ${fullInput}`);
+            const chainedCommands = fullInput.split("&&");
+            chainedCommands.forEach(c => executeSingleCommand(c));
+        }
+
+        function quickCommand(cmdString) {
+            if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
+            if (editorOpen) closeEditor();
+            handleCommandLine(cmdString);
+        }
+
+        // =========================================================================
+        // KEYBOARD & FOCUS LISTENERS
+        // =========================================================================
+        cmdInputEl.addEventListener('keydown', (e) => {
+            if (!isPoweredOn) return;
+            if (e.key === 'Enter') {
+                const val = cmdInputEl.value;
+                cmdInputEl.value = '';
+
+                if (!isLoggedIn && !isAuthenticating) {
+                    printLine(`login as: ${val || 'operator'}`);
+                    handleOperatorLogin(val);
+                    return;
+                }
+
+                if (isLoggedIn && !isAuthenticating) {
+                    handleCommandLine(val);
+                }
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (!isPoweredOn) return;
+            if (editorOpen) {
+                if (e.key === 'Escape' || e.key === 'q' || (e.ctrlKey && e.key.toLowerCase() === 'x')) {
+                    e.preventDefault();
+                    closeEditor();
+                }
+            }
+        });
+
+        function focusTerminalInput(e) {
+            if (!isPoweredOn) return;
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+            if (!editorOpen && !isAuthenticating) {
+                cmdInputEl.focus();
+            }
+        }
+
+        // Start Boot Prompt on Load
+        window.onload = () => {
+            initBootScreen();
+            cmdInputEl.focus();
+        };
+    </script>
+</body>
+</html>

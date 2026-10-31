@@ -1,0 +1,247 @@
+[
+  {
+    "id": "sess_24duv4g",
+    "operatorName": "guest",
+    "startTime": "2026-10-31T13:15:12.967Z",
+    "lastActive": "2026-10-31T13:21:59.734Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-10-31T13:15:12.967Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-10-31T13:15:28.550Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/about && ls"
+      },
+      {
+        "timestamp": "2026-10-31T13:20:11.742Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/about && ls"
+      }
+    ]
+  },
+  {
+    "id": "sess_og75vah",
+    "operatorName": "Chadhawk",
+    "startTime": "2026-10-31T02:26:57.469Z",
+    "lastActive": "2026-10-31T02:27:07.665Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-10-31T02:26:57.469Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-10-31T02:27:02.565Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "temp"
+      },
+      {
+        "timestamp": "2026-10-31T02:27:07.665Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "stress"
+      }
+    ]
+  },
+  {
+    "id": "sess_o98z6q1",
+    "operatorName": "operator",
+    "startTime": "2026-10-31T02:16:09.954Z",
+    "lastActive": "2026-10-31T02:17:39.480Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-10-31T02:16:09.954Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-10-31T02:16:58.923Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "battery"
+      },
+      {
+        "timestamp": "2026-10-31T02:17:20.985Z",
+        "action": "POWER_OFF",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T02:17:39.480Z",
+        "action": "POWER_ON",
+        "details": ""
+      }
+    ]
+  },
+  {
+    "id": "sess_wkaecf7",
+    "operatorName": "epidemwick",
+    "startTime": "2026-10-31T02:09:51.912Z",
+    "lastActive": "2026-10-31T13:13:21.757Z",
+    "location": "Philadelphia, Pennsylvania",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "ip": "174.173.105.130, 169.254.169.126",
+    "events": [
+      {
+        "timestamp": "2026-10-31T02:09:51.912Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-10-31T02:09:56.244Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/resume && ls"
+      },
+      {
+        "timestamp": "2026-10-31T02:09:58.573Z",
+        "action": "TREE_OPEN_FILE",
+        "details": "~/resume/experience.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:09:58.588Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "vim experience.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:00.169Z",
+        "action": "TREE_OPEN_FILE",
+        "details": "~/resume/education.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:00.172Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "vim education.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:00.737Z",
+        "action": "TREE_OPEN_FILE",
+        "details": "~/resume/skills.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:00.738Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "vim skills.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:01.709Z",
+        "action": "HARDWARE_BUTTON_CLICKED",
+        "details": "REW"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:02.664Z",
+        "action": "HARDWARE_BUTTON_CLICKED",
+        "details": "FFWD"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:02.669Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/projects && ls"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:03.322Z",
+        "action": "HARDWARE_BUTTON_CLICKED",
+        "details": "PLAY"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:03.324Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "vim README.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:06.432Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/contact && ls"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:08.668Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/contact && ls"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:28.337Z",
+        "action": "RESTART_TRIGGERED",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T02:10:52.883Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/contact && ls"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:54.829Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "vim contact_me.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:10:54.830Z",
+        "action": "TREE_OPEN_FILE",
+        "details": "~/contact/contact_me.txt"
+      },
+      {
+        "timestamp": "2026-10-31T02:11:25.501Z",
+        "action": "POWER_OFF",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T02:11:26.014Z",
+        "action": "POWER_ON",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T02:11:27.760Z",
+        "action": "RESTART_TRIGGERED",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T13:13:13.457Z",
+        "action": "RESTART_TRIGGERED",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T13:13:21.161Z",
+        "action": "OWNER_AUTHENTICATED",
+        "details": "epidemwick"
+      }
+    ]
+  },
+  {
+    "id": "sess_e3dup6k",
+    "operatorName": "Chadhawk",
+    "startTime": "2026-10-31T02:02:53.655Z",
+    "lastActive": "2026-10-31T02:04:20.147Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-10-31T02:02:53.655Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-10-31T02:03:34.335Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "admin"
+      },
+      {
+        "timestamp": "2026-10-31T02:03:44.169Z",
+        "action": "RESTART_TRIGGERED",
+        "details": ""
+      },
+      {
+        "timestamp": "2026-10-31T02:04:20.033Z",
+        "action": "OWNER_AUTHENTICATED",
+        "details": "Chadhawk"
+      }
+    ]
+  }
+]

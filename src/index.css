@@ -1,0 +1,1993 @@
+@import "tailwindcss";
+
+:root {
+  --bg-color: #0d0a04;
+  --text-color: #ffb000;
+  --text-dim: #9e6b00;
+  --accent-blue: #5bc0be;
+  --bezel-red: #b52b24;
+  --chassis-base: #8a877f;
+  --chassis-dark: #57544e;
+  --chassis-light: #a8a49b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #09090b;
+  background-image: radial-gradient(circle at 50% 40%, #1c1917 0%, #060608 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", monospace;
+  color: var(--text-color);
+}
+
+/* Outer Rugged 80s Hardware Chassis (Wingman 2 / REPLACED style) */
+#device-chassis {
+  position: relative;
+  width: 100%;
+  max-width: 740px;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 920px;
+  background: linear-gradient(135deg, var(--chassis-light) 0%, var(--chassis-base) 45%, #706e67 100%);
+  border-radius: 26px;
+  padding: 34px 46px 118px 42px;
+  box-shadow: 
+    0 35px 70px rgba(0,0,0,0.95),
+    inset 0 3px 5px rgba(255,255,255,0.45),
+    inset 0 -8px 16px rgba(0,0,0,0.7),
+    inset 0 0 45px rgba(45, 35, 25, 0.45);
+  border: 4px solid #3d3b37;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Worn, Beaten-Up Gritty Texture & Scratches Overlay */
+#device-chassis::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 3;
+  background-image: 
+    repeating-linear-gradient(115deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 9px),
+    repeating-linear-gradient(25deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 14px),
+    radial-gradient(circle at 12% 18%, rgba(30,25,20,0.35) 0%, transparent 18%),
+    radial-gradient(circle at 88% 82%, rgba(25,20,15,0.4) 0%, transparent 22%),
+    radial-gradient(circle at 82% 10%, rgba(0,0,0,0.28) 0%, transparent 12%);
+  mix-blend-mode: multiply;
+}
+
+/* Thick Distressed Red Racing/Industrial Stripe Around Bezel */
+.red-frame-stripe {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  bottom: 102px;
+  border: 6px solid var(--bezel-red);
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.88;
+  box-shadow: 
+    inset 0 0 8px rgba(0,0,0,0.5),
+    0 1px 2px rgba(255,255,255,0.25);
+  mask-image: linear-gradient(160deg, #000 18%, rgba(0,0,0,0.65) 22%, #000 26%, #000 72%, rgba(0,0,0,0.55) 75%, #000 80%);
+}
+
+/* Top Bezel Etched Label */
+.bezel-top-label {
+  position: absolute;
+  top: 17px;
+  right: 56px;
+  background: var(--chassis-base);
+  padding: 0 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #383530;
+  z-index: 4;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+}
+
+/* Top Bezel Mechanical Controls */
+.bezel-top-controls {
+  position: absolute;
+  top: 9px;
+  left: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--chassis-base);
+  padding: 2px 10px;
+  border-radius: 6px;
+  z-index: 6;
+}
+
+.hw-top-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #4b4944 0%, #2b2927 100%);
+  border: 2px solid #1c1a18;
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  color: #d6d3cb;
+  cursor: pointer;
+  box-shadow: 
+    0 3px 0 #141311,
+    0 4px 5px rgba(0,0,0,0.55),
+    inset 0 1px 1px rgba(255,255,255,0.22);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.1s;
+  text-transform: uppercase;
+}
+
+.hw-top-btn:hover {
+  filter: brightness(1.12);
+}
+
+.hw-top-btn:active, .hw-top-btn.depressed {
+  transform: translateY(2px);
+  box-shadow: 
+    0 1px 0 #141311,
+    0 2px 3px rgba(0,0,0,0.5),
+    inset 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Power button: Keep red like requested */
+.hw-top-btn.power-btn {
+  border-color: #4a1916;
+  background: linear-gradient(180deg, #69221d 0%, #3d120f 100%);
+  color: #ffd2cf;
+}
+
+.hw-top-btn .pwr-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #33ff66;
+  box-shadow: 0 0 6px #33ff66;
+}
+
+.hw-top-btn.power-btn.off-state .pwr-dot {
+  background: #ff2a1f;
+  box-shadow: 0 0 6px #ff2a1f;
+}
+
+/* Degauss button: same tactical color as restart button, with glowing yellow LED dot */
+.hw-top-btn.degauss-btn {
+  background: linear-gradient(180deg, #4b4944 0%, #2b2927 100%);
+  border: 2px solid #1c1a18;
+  color: #d6d3cb;
+}
+
+.hw-top-btn .degauss-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffb000;
+  box-shadow: 0 0 6px #ffb000;
+}
+
+.hw-top-btn.sound-btn {
+  width: 88px;
+  min-width: 88px;
+  max-width: 88px;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  border-color: #3b3a32;
+  background: linear-gradient(180deg, #3f3e36 0%, #21201b 100%);
+  color: #ffb000;
+}
+
+/* Retro Multi-Segment LED Battery Level Indicator */
+.hw-batt-gauge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(180deg, #181715 0%, #0d0c0b 100%);
+  border: 2px solid #23221e;
+  border-radius: 4px;
+  padding: 3px 8px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.9),
+    0 1px 1px rgba(255, 255, 255, 0.12);
+  user-select: none;
+}
+
+.batt-label-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 1px;
+}
+
+.batt-text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: #9c978b;
+  text-transform: uppercase;
+}
+
+.batt-cell-tag {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  color: #615d55;
+  letter-spacing: 0.5px;
+}
+
+.batt-ladder {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #080707;
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid #1a1917;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+.batt-segment {
+  width: 5px;
+  height: 12px;
+  border-radius: 1px;
+  background: #1c1a17;
+  border: 0.5px solid rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+/* Specific segment color calibrations */
+.batt-segment.seg-red.lit {
+  background: #ff3329;
+  box-shadow: 0 0 6px #ff3329, 0 0 10px rgba(255, 51, 41, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.batt-segment.seg-red.pulsing {
+  animation: batt-crit-pulse 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes batt-crit-pulse {
+  0%, 100% {
+    background: #ff3329;
+    box-shadow: 0 0 7px #ff3329, 0 0 12px rgba(255, 51, 41, 0.6);
+    opacity: 1;
+  }
+  50% {
+    background: #42110e;
+    box-shadow: none;
+    opacity: 0.35;
+  }
+}
+
+.batt-segment.seg-amber.lit {
+  background: #ff9900;
+  box-shadow: 0 0 6px #ff9900, 0 0 9px rgba(255, 153, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.batt-segment.seg-yellow.lit {
+  background: #ffcc00;
+  box-shadow: 0 0 6px #ffcc00, 0 0 9px rgba(255, 204, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.batt-segment.seg-green.lit {
+  background: #4cd964;
+  box-shadow: 0 0 6px #4cd964, 0 0 9px rgba(76, 217, 100, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.batt-segment.seg-green-bright.lit {
+  background: #30d158;
+  box-shadow: 0 0 7px #30d158, 0 0 11px rgba(48, 209, 88, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.batt-readout {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #c9c1ae;
+  min-width: 26px;
+  text-align: right;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.9);
+}
+
+/* Off state when chassis power is toggled off */
+.hw-batt-gauge.off-state {
+  border-color: #1a1917;
+}
+
+.hw-batt-gauge.off-state .batt-segment {
+  background: #141311 !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+.hw-batt-gauge.off-state .batt-text,
+.hw-batt-gauge.off-state .batt-cell-tag,
+.hw-batt-gauge.off-state .batt-readout {
+  color: #38352f;
+  text-shadow: none;
+}
+
+/* CRT Power-Down Overlay */
+#crt-off-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: #030303;
+  z-index: 55;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#crt-off-overlay.active {
+  display: flex;
+  animation: crt-fade-in 0.25s forwards;
+}
+
+.crt-beam {
+  width: 100%;
+  height: 3px;
+  background: #ffb000;
+  box-shadow: 0 0 18px #ffb000, 0 0 35px #ffffff;
+  animation: crt-collapse 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.crt-standby-hint {
+  margin-top: 18px;
+  font-size: 11px;
+  color: #5c461c;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: show-hint 0.4s 0.5s forwards;
+}
+
+@keyframes crt-collapse {
+  0% { transform: scaleX(1) scaleY(25); opacity: 1; }
+  50% { transform: scaleX(1) scaleY(1); opacity: 1; }
+  85% { transform: scaleX(0.02) scaleY(2); opacity: 1; }
+  100% { transform: scaleX(0) scaleY(0); opacity: 0; }
+}
+
+@keyframes crt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* CRT Power-On / Startup Warm-Up Overlay */
+#crt-on-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: #030303;
+  z-index: 54;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#crt-on-overlay.active {
+  display: flex;
+  animation: crt-on-backdrop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.crt-on-beam {
+  width: 100%;
+  height: 4px;
+  background: #fff3d1;
+  box-shadow: 0 0 25px #ffb000, 0 0 50px #ff8800, 0 0 90px #ffffff;
+  animation: crt-expand 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes crt-expand {
+  0% { transform: scaleX(0.01) scaleY(0.5); opacity: 1; }
+  35% { transform: scaleX(1) scaleY(1.2); opacity: 1; }
+  75% { transform: scaleX(1) scaleY(160); opacity: 0.9; }
+  100% { transform: scaleX(1) scaleY(260); opacity: 0; }
+}
+
+@keyframes crt-on-backdrop {
+  0%, 45% { background: #030303; opacity: 1; }
+  75% { background: rgba(255, 176, 0, 0.16); opacity: 0.8; }
+  100% { background: transparent; opacity: 0; }
+}
+
+/* CRT Magnetic Degauss Coil Distortion Animation */
+#screen-bezel.degaussing #top-nav,
+#screen-bezel.degaussing #terminal,
+#screen-bezel.degaussing #editor-view {
+  animation: degauss-wave 0.95s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+#screen-bezel.degaussing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(120, 255, 210, 0.28) 0%, rgba(255, 60, 180, 0.25) 45%, rgba(255, 176, 0, 0.2) 75%, transparent 100%);
+  z-index: 58;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: degauss-rainbow 0.95s ease-out forwards;
+}
+
+@keyframes degauss-wave {
+  0% {
+    transform: scale(1) skew(0deg, 0deg);
+    filter: none;
+  }
+  12% {
+    transform: scale(0.86, 1.14) skew(14deg, -5deg) translate(-12px, 6px);
+    filter: drop-shadow(-10px 0 0 rgba(255,0,90,0.85)) drop-shadow(10px 0 0 rgba(0,255,255,0.85)) hue-rotate(110deg) brightness(1.8);
+  }
+  26% {
+    transform: scale(1.12, 0.88) skew(-12deg, 4deg) translate(10px, -6px);
+    filter: drop-shadow(8px -4px 0 rgba(255,255,0,0.85)) drop-shadow(-8px 4px 0 rgba(140,0,255,0.85)) hue-rotate(-95deg) brightness(1.5);
+  }
+  42% {
+    transform: scale(0.95, 1.06) skew(7deg, -2deg) translate(-6px, 3px);
+    filter: drop-shadow(-5px 0 0 rgba(255,50,50,0.7)) drop-shadow(5px 0 0 rgba(0,220,255,0.7)) brightness(1.3);
+  }
+  58% {
+    transform: scale(1.03, 0.97) skew(-4deg, 1deg) translate(4px, -2px);
+    filter: drop-shadow(3px 0 0 rgba(255,176,0,0.6)) brightness(1.15);
+  }
+  76% {
+    transform: scale(0.99, 1.01) skew(1.5deg, 0deg) translate(-2px, 0);
+  }
+  100% {
+    transform: scale(1) skew(0deg, 0deg) translate(0, 0);
+    filter: none;
+  }
+}
+
+@keyframes degauss-rainbow {
+  0% { opacity: 0; transform: scale(0.5); }
+  15% { opacity: 1; transform: scale(1.25) rotate(12deg); }
+  45% { opacity: 0.7; transform: scale(0.9) rotate(-8deg); }
+  100% { opacity: 0; transform: scale(1.1) rotate(0deg); }
+}
+
+@keyframes show-hint {
+  to { opacity: 1; }
+}
+
+/* Deep Recessed Screen Bezel */
+#screen-bezel {
+  position: relative;
+  flex: 1;
+  background: var(--bg-color);
+  border-radius: 12px;
+  border: 10px solid #2b2925;
+  box-shadow: 
+    inset 0 0 35px rgba(0,0,0,0.95),
+    inset 0 0 12px rgba(255, 176, 0, 0.12),
+    0 2px 3px rgba(255,255,255,0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 5;
+}
+
+/* CRT Scanline & Subtle Vignette Overlay - softened for high text readability */
+#screen-bezel::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%), 
+    radial-gradient(circle at center, transparent 72%, rgba(0,0,0,0.45) 100%);
+  background-size: 100% 4px, 100% 100%;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Authentic CRT 60Hz Phosphor Raster Micro-Flicker */
+.crt-flicker-active {
+  animation: crtPhosphorRaster 0.14s infinite;
+}
+
+@keyframes crtPhosphorRaster {
+  0% { opacity: 0.992; }
+  25% { opacity: 1; }
+  50% { opacity: 0.985; }
+  75% { opacity: 1; }
+  100% { opacity: 0.991; }
+}
+
+/* Authentic Permanent Phosphor CRT Burn-In Ghost Layer */
+.crt-burn-in {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 12;
+  overflow: hidden;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", monospace;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: #ff9d00;
+  opacity: 0.048;
+  filter: blur(0.35px);
+  mix-blend-mode: screen;
+  transition: opacity 0.4s ease, color 0.4s ease, filter 0.4s ease;
+}
+
+.crt-burn-in.unpowered {
+  opacity: 0.16;
+  color: #3b2f1c;
+  filter: blur(0.25px);
+  mix-blend-mode: normal;
+}
+
+.crt-burn-in-mask {
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(255, 176, 0, 0.04);
+  background: radial-gradient(ellipse at 50% 45%, rgba(255, 176, 0, 0.025) 0%, transparent 68%);
+}
+
+.crt-burn-in-content {
+  position: absolute;
+  inset: 22px 26px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.burn-line {
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.burn-header {
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.burn-sub {
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.burn-prompt {
+  color: #ffb82e;
+  font-weight: bold;
+}
+
+.burn-log {
+  font-size: 9.5px;
+  opacity: 0.85;
+}
+
+.burn-box {
+  margin-top: 14px;
+  font-size: 9.5px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.burn-line.burn-bottom {
+  margin-top: auto;
+  font-weight: bold;
+  font-size: 10.5px;
+}
+
+/* Left Side Tape-Deck Buttons */
+.hw-buttons-left {
+  position: absolute;
+  left: -46px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1;
+}
+
+.deck-btn {
+  position: relative;
+  width: 46px;
+  height: 88px;
+  background: linear-gradient(90deg, #3c3a36 0%, #636059 35%, #4a4742 100%);
+  border: 3px solid #262421;
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  box-shadow: 
+    -6px 6px 12px rgba(0,0,0,0.7),
+    inset 2px 2px 3px rgba(255,255,255,0.25),
+    inset -4px -4px 8px rgba(0,0,0,0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.12s;
+  padding-right: 4px;
+}
+
+.deck-btn::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25) 0px,
+    rgba(255,255,255,0.25) 2px,
+    rgba(0,0,0,0.5) 2px,
+    rgba(0,0,0,0.5) 4px
+  );
+  border-radius: 2px;
+}
+
+.deck-btn span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #d6d3cb;
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.9);
+}
+
+.deck-btn:hover {
+  filter: brightness(1.08);
+}
+
+.deck-btn:active, .deck-btn.depressed {
+  transform: translateX(11px);
+  box-shadow: 
+    -2px 3px 5px rgba(0,0,0,0.8),
+    inset 2px 2px 5px rgba(0,0,0,0.7);
+  background: linear-gradient(90deg, #2e2c29 0%, #4d4a44 45%, #383531 100%);
+}
+
+.deck-btn.depressed span {
+  color: var(--text-color);
+  text-shadow: 0 0 6px rgba(255, 176, 0, 0.7);
+}
+
+/* Right Side Scroll Bezel Marker */
+.scroll-bezel-marker {
+  position: absolute;
+  right: 17px;
+  top: 44%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.arrow-80s-btn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 11px;
+  color: #292724;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.arrow-80s-btn:hover {
+  color: #ffb000;
+  transform: scale(1.3);
+  text-shadow: 0 0 6px rgba(255, 176, 0, 0.6);
+}
+
+.arrow-80s-btn:active {
+  transform: scale(0.95);
+}
+
+.scroll-bezel-marker .scroll-text {
+  writing-mode: vertical-rl;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: #292724;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+  user-select: none;
+}
+
+/* Elongated Rotary Scroll Wheel: more elongated and tactile */
+.wheel-recess-slot {
+  position: absolute;
+  right: -38px;
+  top: 44%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 144px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+#scroll-wheel {
+  width: 76px;
+  height: 140px;
+  margin-left: -38px;
+  border-radius: 46px;
+  border: 3px solid #241d18;
+  background-color: #4a3525;
+  background-image: 
+    radial-gradient(circle at 55% 50%, rgba(255,200,150,0.25) 0%, transparent 60%, rgba(0,0,0,0.8) 100%),
+    repeating-linear-gradient(
+      0deg,
+      #251b14 0px,
+      #251b14 5px,
+      #7a543c 5px,
+      #94694b 8px,
+      #35251c 8px,
+      #35251c 12px
+    );
+  background-size: 100% 100%, 100% 24px;
+  box-shadow: 
+    5px 8px 16px rgba(0,0,0,0.9),
+    inset -4px 0 8px rgba(255,255,255,0.22),
+    inset 7px 0 14px rgba(0,0,0,0.9);
+  cursor: ns-resize;
+  transition: background-position 0.06s linear;
+}
+
+/* Bottom Hardware Bezel Panel */
+.bottom-hardware-deck {
+  position: absolute;
+  bottom: 14px;
+  left: 38px;
+  right: 42px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 6;
+  padding: 0 10px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(255,255,255,0.08) 100%);
+  border-top: 2px groove rgba(255,255,255,0.25);
+  border-radius: 8px;
+}
+
+.brand-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.derailleur-logo {
+  font-family: "Arial Black", Impact, sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: #2b2926;
+  text-shadow: 
+    -1px -1px 0 rgba(0,0,0,0.6),
+    1px 1px 0 rgba(255,255,255,0.45);
+  transform: skewX(-12deg);
+  display: inline-block;
+  line-height: 1.05;
+}
+
+.derailleur-logo span {
+  color: var(--bezel-red);
+  font-size: 15px;
+  margin-left: 3px;
+}
+
+.corp-stamp {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  color: #3a3733;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* Status LED Cluster */
+.status-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #6e6b64;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 2px solid #4a4843;
+  box-shadow: 
+    inset 0 2px 5px rgba(0,0,0,0.6),
+    0 1px 0 rgba(255,255,255,0.35);
+}
+
+.led-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 1px;
+  color: #24221f;
+  text-align: right;
+}
+
+#status-led {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #292724;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+#status-led::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 6px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.65);
+  transform: rotate(-25deg);
+}
+
+.led-offline {
+  background: radial-gradient(circle, #ff4d4d 10%, #a60000 85%);
+  box-shadow: 0 0 12px #ff1a1a, 0 0 22px rgba(255, 26, 26, 0.7), inset 0 0 4px #fff;
+  animation: blink-red 1s infinite ease-in-out;
+}
+
+.led-thinking {
+  background: radial-gradient(circle, #ffe066 10%, #cc8800 85%);
+  box-shadow: 0 0 14px #ffcc00, 0 0 24px rgba(255, 204, 0, 0.8), inset 0 0 4px #fff;
+  animation: blink-yellow 0.28s infinite alternate;
+}
+
+.led-online {
+  background: radial-gradient(circle, #66ff99 10%, #00802b 85%);
+  box-shadow: 0 0 12px #00e64d, 0 0 20px rgba(0, 230, 77, 0.65), inset 0 0 4px #fff;
+}
+
+.led-poweroff {
+  background: radial-gradient(circle, #2b1d1d 10%, #140d0d 85%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.9);
+}
+
+@keyframes blink-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 14px #ff1a1a, 0 0 26px rgba(255, 26, 26, 0.8); }
+  50% { opacity: 0.3; box-shadow: 0 0 3px #660000; }
+}
+
+@keyframes blink-yellow {
+  0% { opacity: 1; transform: scale(1.03); }
+  100% { opacity: 0.35; transform: scale(0.97); }
+}
+
+/* Glass-Enclosed Flip Clock */
+.flip-clock-glass-housing {
+  position: relative;
+  background: #171614;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 3px solid #383530;
+  box-shadow: 
+    inset 0 4px 10px rgba(0,0,0,0.95),
+    inset 0 -2px 4px rgba(255,255,255,0.12),
+    0 2px 2px rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.flip-clock-glass-housing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,0.32) 0%,
+    rgba(255,255,255,0.08) 28%,
+    transparent 32%,
+    transparent 68%,
+    rgba(255,255,255,0.1) 72%,
+    transparent 100%
+  );
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 6;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.45);
+}
+
+.flip-card {
+  position: relative;
+  background: linear-gradient(180deg, #2b2927 0%, #1c1b19 49%, #0d0c0b 50%, #242220 100%);
+  border: 1px solid #3d3a36;
+  border-radius: 4px;
+  padding: 4px 7px;
+  min-width: 34px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  color: #e8e2d5;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.flip-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.5px;
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.12);
+  z-index: 3;
+}
+
+.flip-card.amber-flap {
+  color: var(--text-color);
+}
+
+.flip-sep {
+  color: #787268;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* Screen Internals */
+#screen-inner {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  z-index: 10;
+}
+
+#top-nav {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  border-bottom: 2px dashed #4a3508;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  z-index: 25;
+}
+
+.nav-left-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.avatar-box {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--text-color);
+  background: #1f1705;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 13px;
+  color: var(--text-color);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(255, 176, 0, 0.25);
+}
+
+#nav-url {
+  font-weight: bold;
+  color: var(--text-color);
+  font-size: 11.5px;
+  letter-spacing: -0.2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-start;
+}
+
+.nav-btn {
+  background: #1c1506;
+  border: 1px solid var(--text-dim);
+  color: var(--text-color);
+  padding: 3px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.nav-btn:hover, .nav-btn.active-nav {
+  background: var(--text-color);
+  color: #000 !important;
+  border-color: var(--text-color);
+  box-shadow: 0 0 8px rgba(255, 176, 0, 0.6);
+}
+
+.nav-tree {
+  border: 1px solid var(--text-dim);
+  background: rgba(25, 18, 4, 0.95);
+  padding: 5px 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  width: 245px;
+  min-width: 235px;
+  max-width: 255px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.tree-item {
+  cursor: pointer;
+  padding: 1.5px 4px;
+  display: block;
+  color: var(--text-color);
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-item:hover {
+  background: rgba(255, 176, 0, 0.2);
+}
+
+.tree-folder {
+  font-weight: bold;
+}
+
+.tree-active {
+  background: var(--text-color) !important;
+  color: #000 !important;
+  font-weight: bold;
+}
+
+#terminal {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 6px;
+  font-size: 15px;
+  line-height: 1.55;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-dim) #120d02;
+  box-sizing: border-box;
+}
+
+#terminal::-webkit-scrollbar {
+  width: 6px;
+}
+#terminal::-webkit-scrollbar-track {
+  background: #120d02;
+}
+#terminal::-webkit-scrollbar-thumb {
+  background-color: var(--text-dim);
+}
+
+.line {
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 3px;
+  font-size: 15px;
+}
+
+#input-line {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding-bottom: 8px;
+  font-size: 15px;
+}
+
+#prompt-label {
+  color: var(--text-color);
+  font-weight: bold;
+  margin-right: 8px;
+  white-space: nowrap;
+  font-size: 15px;
+}
+
+#cmd-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 15px;
+  flex: 1;
+  caret-color: var(--text-color);
+}
+
+.ls-dir {
+  color: var(--accent-blue);
+}
+
+.ls-file {
+  color: var(--text-color);
+}
+
+.social-link {
+  display: inline-block;
+  color: var(--text-color);
+  text-decoration: none;
+  border: 1px dashed var(--text-dim);
+  padding: 4px 10px;
+  margin: 4px 6px 4px 0;
+  background: rgba(255, 176, 0, 0.05);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.social-link:hover {
+  background: var(--text-color);
+  color: #000;
+  border-style: solid;
+  box-shadow: 0 0 10px rgba(255, 176, 0, 0.5);
+}
+
+/* Dedicated Vim / Nano Editor Pane: strictly positioned BELOW #top-nav under a dedicated partition */
+#editor-view {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  background: #0d0a04;
+  border: 1px solid var(--text-dim);
+  border-top: 3px double var(--text-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  margin-top: 2px;
+}
+
+#editor-top-status {
+  background: var(--text-color);
+  color: #000;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 3px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#editor-content {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-dim) #120d02;
+  box-sizing: border-box;
+}
+
+#editor-status {
+  background: var(--text-color);
+  color: #000;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 3px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Fluid responsive ASCII banner: scaled gracefully with clamp so words/characters NEVER wrap and distort */
+.ascii-banner {
+  color: var(--text-color);
+  font-weight: bold;
+  line-height: 1.05;
+  margin-bottom: 6px;
+  font-size: clamp(4.8px, 1.15vw, 10px);
+  white-space: pre;
+  overflow-x: auto;
+  max-width: 100%;
+  letter-spacing: -0.2px;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide protruding scroll wheel and side buttons on ALL mobile devices, tablets, touch screens, and landscape mode */
+@media (max-width: 980px), (max-height: 600px), (hover: none) and (pointer: coarse) {
+  .wheel-recess-slot,
+  .scroll-bezel-marker,
+  .hw-buttons-left {
+    display: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    padding: 0;
+  }
+  #device-chassis {
+    height: min(840px, calc(100dvh - 12px));
+    padding: 28px 14px 84px 14px;
+    border-radius: 18px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .bottom-hardware-deck {
+    left: 10px;
+    right: 10px;
+    height: 64px;
+  }
+  .bezel-top-controls {
+    left: 10px;
+    gap: 4px;
+  }
+  .bezel-top-label {
+    display: none;
+  }
+}
+
+/* Comprehensive Mobile Portrait Viewport (iPhone 13 portrait 390px) */
+@media (max-width: 640px) {
+  /* Prevent iOS Safari auto-zoom on focus by enforcing 16px on inputs */
+  #cmd-input, input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  #device-chassis {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: calc(100dvh - 8px) !important;
+    min-height: 520px !important;
+    max-height: 840px !important;
+    padding: 28px 8px 68px 8px !important;
+    border-radius: 14px !important;
+    border-width: 3px !important;
+    margin: 0 auto !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9) !important;
+    box-sizing: border-box !important;
+  }
+
+  .red-frame-stripe {
+    top: 6px !important;
+    left: 4px !important;
+    right: 4px !important;
+    bottom: 60px !important;
+    border-width: 3px !important;
+    border-radius: 10px !important;
+  }
+
+  .bezel-top-controls {
+    left: 6px !important;
+    right: 6px !important;
+    top: 5px !important;
+    gap: 3px !important;
+    padding: 2px 4px !important;
+    max-width: calc(100% - 12px) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .bezel-top-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hw-top-btn {
+    padding: 2px 5px !important;
+    font-size: 7.5px !important;
+    letter-spacing: 0.6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .hw-top-btn.sound-btn {
+    width: auto !important;
+    min-width: 60px !important;
+  }
+
+  .hw-batt-gauge {
+    padding: 2px 4px !important;
+    gap: 3px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .batt-cell-tag {
+    display: none !important;
+  }
+
+  .batt-text {
+    font-size: 7px !important;
+  }
+
+  .batt-readout {
+    font-size: 8px !important;
+  }
+
+  .hw-temp-gauge {
+    padding: 2px 4px !important;
+    gap: 2px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .bottom-hardware-deck {
+    left: 6px !important;
+    right: 6px !important;
+    bottom: 6px !important;
+    height: 52px !important;
+    padding: 0 6px !important;
+  }
+
+  .derailleur-logo {
+    font-size: 14px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .corp-stamp {
+    font-size: 6px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .flip-clock {
+    transform: scale(0.72) !important;
+    transform-origin: right center !important;
+  }
+
+  #screen-bezel {
+    border-width: 4px !important;
+    border-radius: 6px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #screen-inner {
+    padding: 6px 8px 6px 8px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Responsive CRT Top Nav & File Tree */
+  #top-nav {
+    flex-direction: column !important;
+    gap: 5px !important;
+    padding-bottom: 5px !important;
+    margin-bottom: 5px !important;
+    border-bottom-width: 1px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .nav-left-deck {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #nav-url {
+    font-size: 10px !important;
+  }
+
+  .avatar-box {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 10px !important;
+  }
+
+  .nav-links {
+    gap: 2px 4px !important;
+  }
+
+  .nav-btn {
+    padding: 2px 5px !important;
+    font-size: 8.5px !important;
+  }
+
+  .nav-tree {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 9px !important;
+    padding: 3px 6px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 1px 6px !important;
+    white-space: nowrap !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .tree-item {
+    padding: 1px 2px !important;
+    font-size: 9px !important;
+    line-height: 1.3 !important;
+  }
+
+  #terminal {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    padding-right: 2px !important;
+  }
+
+  .line {
+    font-size: 13px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #input-line {
+    font-size: 13px !important;
+    margin-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  #prompt-label {
+    font-size: 13px !important;
+    margin-right: 4px !important;
+  }
+
+  .ascii-banner {
+    font-size: 5.5px !important;
+    margin-bottom: 4px !important;
+  }
+}
+
+/* Mobile Landscape Mode Optimization (e.g. iPhone in landscape: 844x390px) */
+@media (max-height: 540px) {
+  body {
+    padding: 0 !important;
+    align-items: center !important;
+  }
+  #device-chassis {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 98dvh !important;
+    min-height: 310px !important;
+    max-height: 480px !important;
+    padding: 22px 8px 42px 8px !important;
+    border-radius: 12px !important;
+    border-width: 3px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.85) !important;
+    box-sizing: border-box !important;
+  }
+  .red-frame-stripe {
+    top: 4px !important;
+    left: 4px !important;
+    right: 4px !important;
+    bottom: 38px !important;
+    border-width: 2px !important;
+    border-radius: 8px !important;
+  }
+  .bezel-top-controls {
+    top: 3px !important;
+    left: 6px !important;
+    gap: 3px !important;
+    padding: 1px 4px !important;
+    max-width: calc(100% - 12px) !important;
+  }
+  .hw-top-btn {
+    padding: 1px 4px !important;
+    font-size: 7px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .bottom-hardware-deck {
+    height: 34px !important;
+    bottom: 4px !important;
+    left: 6px !important;
+    right: 6px !important;
+    padding: 0 6px !important;
+  }
+  .derailleur-logo {
+    font-size: 13px !important;
+  }
+  .corp-stamp {
+    font-size: 6px !important;
+  }
+  .flip-clock {
+    transform: scale(0.6) !important;
+    transform-origin: right center !important;
+  }
+  #screen-bezel {
+    border-width: 3px !important;
+    border-radius: 6px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  #screen-inner {
+    padding: 4px 6px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  #top-nav {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding-bottom: 3px !important;
+    margin-bottom: 3px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .nav-left-deck {
+    flex: 1 !important;
+    min-width: 0 !important;
+    gap: 2px !important;
+  }
+  .nav-links {
+    gap: 2px 3px !important;
+  }
+  .nav-btn {
+    padding: 1px 4px !important;
+    font-size: 8px !important;
+  }
+  .nav-tree {
+    width: 220px !important;
+    min-width: 180px !important;
+    max-width: 230px !important;
+    font-size: 8.5px !important;
+    padding: 2px 4px !important;
+    display: block !important;
+  }
+  #terminal {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+    padding-right: 2px !important;
+  }
+  .line {
+    font-size: 12px !important;
+    margin-bottom: 1.5px !important;
+  }
+  #input-line {
+    font-size: 12px !important;
+    margin-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+  #prompt-label {
+    font-size: 12px !important;
+  }
+  .ascii-banner {
+    font-size: 4.8px !important;
+  }
+}
+
+/* ==========================================================================
+   Thermal Throttling & Deflection Jitter Simulation
+   ========================================================================== */
+
+/* Level 1: Mild Thermal Warmth (60°C - 73°C) */
+.thermal-drift-mild {
+  animation: thermalMicroJitter 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes thermalMicroJitter {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0.4px, -0.2px);
+  }
+  50% {
+    transform: translate(-0.35px, 0.25px);
+  }
+  75% {
+    transform: translate(0.3px, 0.2px);
+  }
+  100% {
+    transform: translate(-0.25px, -0.15px);
+  }
+}
+
+/* Level 2: Moderate Thermal Throttling (74°C - 83°C) */
+.thermal-drift-medium {
+  animation: thermalDeflectionWave 1.9s ease-in-out infinite alternate;
+  filter: contrast(125%) blur(0.35px);
+  text-shadow: 
+    -1px 0 rgba(255, 140, 0, 0.65),
+    1px 0 rgba(255, 50, 0, 0.45),
+    0 0 4px rgba(255, 176, 0, 0.6);
+  letter-spacing: -0.1px;
+}
+
+@keyframes thermalDeflectionWave {
+  0% {
+    transform: skewX(0deg) translate(0, 0);
+  }
+  20% {
+    transform: skewX(0.16deg) translate(0.9px, -0.3px);
+  }
+  40% {
+    transform: skewX(-0.18deg) translate(-1.1px, 0.4px);
+  }
+  65% {
+    transform: skewX(0.22deg) translate(1.2px, -0.2px);
+  }
+  85% {
+    transform: skewX(-0.14deg) translate(-0.7px, 0.6px);
+  }
+  100% {
+    transform: skewX(0.1deg) translate(0.8px, -0.3px);
+  }
+}
+
+/* Level 3: Critical Thermal Throttling (84°C+) */
+.thermal-drift-heavy {
+  animation: thermalSevereJitter 0.85s steps(4, jump-none) infinite alternate;
+  filter: contrast(155%) blur(0.65px) brightness(1.15);
+  text-shadow: 
+    -1.8px 0 rgba(255, 80, 0, 0.9),
+    1.8px 0 rgba(255, 20, 0, 0.75),
+    0 0 7px rgba(255, 176, 0, 0.95);
+}
+
+@keyframes thermalSevereJitter {
+  0% {
+    transform: skewX(-0.35deg) translate(-1.5px, 0.4px);
+  }
+  25% {
+    transform: skewX(0.38deg) translate(1.7px, -0.6px);
+  }
+  50% {
+    transform: skewX(-0.28deg) translate(-1.1px, 0.9px);
+  }
+  75% {
+    transform: skewX(0.32deg) translate(1.4px, -0.7px);
+  }
+  100% {
+    transform: skewX(-0.42deg) translate(-1.8px, 0.5px);
+  }
+}
+
+/* Hardware Bezel Thermal LED Indicator */
+.hw-temp-gauge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #191714;
+  border: 1px solid #3c3933;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: Arial, Helvetica, sans-serif;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.7);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.hw-temp-gauge.temp-warm {
+  border-color: #9e6b00;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.7), 0 0 4px rgba(255, 176, 0, 0.3);
+}
+
+.hw-temp-gauge.temp-critical {
+  border-color: #ff3322;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.7), 0 0 8px rgba(255, 51, 34, 0.65);
+  animation: tempBorderPulse 0.7s infinite alternate;
+}
+
+@keyframes tempBorderPulse {
+  0% {
+    border-color: #b52b24;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.7), 0 0 4px rgba(255, 43, 36, 0.4);
+  }
+  100% {
+    border-color: #ff4d3b;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.7), 0 0 10px rgba(255, 77, 59, 0.85);
+  }
+}
+
+.hw-temp-gauge.off-state {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.temp-label {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #8c8981;
+}
+
+.temp-readout {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.temp-throttle-tag {
+  font-size: 7.5px;
+  font-weight: 900;
+  padding: 0 3px;
+  border-radius: 2px;
+  letter-spacing: 0.8px;
+  background: #b52b24;
+  color: #fff;
+  animation: tempTagBlink 0.6s step-start infinite;
+}
+
+@keyframes tempTagBlink {
+  50% { opacity: 0.3; }
+}
+
+/* ==========================================================================
+   LEFT-PANEL SYSTEM TELEMETRY HUD (Die Temp, Fan, CPU Load, Net Traffic)
+   ========================================================================== */
+.telemetry-hud-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(18, 13, 3, 0.95);
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  padding: 5px 6px;
+  width: 100%;
+  max-width: 210px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.telemetry-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.telemetry-item {
+  background: #120e04;
+  border: 1px solid #3d2b05;
+  border-radius: 3px;
+  padding: 3px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 38px;
+  transition: border-color 0.2s ease;
+}
+
+.telemetry-item:hover {
+  border-color: var(--text-color);
+}
+
+.telemetry-item.item-throttled {
+  border-color: #9e6b00;
+  box-shadow: 0 0 6px rgba(255, 176, 0, 0.2);
+}
+
+.telemetry-item.item-critical {
+  border-color: #ff3322;
+  box-shadow: 0 0 8px rgba(255, 51, 34, 0.4);
+  animation: critItemFlash 0.8s infinite alternate;
+}
+
+@keyframes critItemFlash {
+  0% { border-color: #b52b24; }
+  100% { border-color: #ff4d3b; }
+}
+
+.item-label-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1;
+}
+
+.telemetry-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7.5px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #a89f8c;
+  text-transform: uppercase;
+}
+
+.telemetry-status-tag {
+  font-size: 7px;
+  font-weight: 700;
+  padding: 0 2px;
+  border-radius: 1px;
+  letter-spacing: 0.5px;
+}
+
+/* Mini 6-segment LED thermal ladder */
+.telemetry-ladder {
+  display: flex;
+  align-items: center;
+  gap: 1.5px;
+  background: #080602;
+  padding: 1.5px 2px;
+  border-radius: 2px;
+  border: 0.5px solid #291e04;
+}
+
+.ladder-seg {
+  width: 2.5px;
+  height: 6px;
+  border-radius: 0.5px;
+  background: #1c1505;
+  transition: background-color 0.2s;
+}
+
+.ladder-seg.seg-green.lit {
+  background: #33ff66;
+  box-shadow: 0 0 3px #33ff66;
+}
+
+.ladder-seg.seg-amber.lit {
+  background: #ffb000;
+  box-shadow: 0 0 3px #ffb000;
+}
+
+.ladder-seg.seg-red.lit {
+  background: #ff3329;
+  box-shadow: 0 0 4px #ff3329;
+}
+
+/* Fan rotation animation */
+.fan-icon-wrap {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fan-svg {
+  width: 14px;
+  height: 14px;
+  transform-origin: center center;
+}
+
+@keyframes fanSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sparkline Bars for CPU load */
+.sparkline-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 14px;
+  background: #0a0802;
+  padding: 1px 2px;
+  border-radius: 2px;
+  border: 0.5px solid #291e04;
+}
+
+.sparkline-bar-slot {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sparkline-bar {
+  width: 100%;
+  background: #ffb000;
+  border-radius: 0.5px;
+  opacity: 0.85;
+  transition: height 0.4s ease-out;
+}
+
+.sparkline-bar.bar-peak {
+  background: #ff5533;
+  box-shadow: 0 0 3px #ff5533;
+}
+
+/* Network activity indicators */
+.net-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #241a05;
+  transition: background-color 0.1s, box-shadow 0.1s;
+}
+
+.net-dot.active {
+  background: #5bc0be;
+  box-shadow: 0 0 4px #5bc0be;
+}
+
+
