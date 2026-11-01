@@ -6,6 +6,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FileSystemData, TerminalLine } from '../types/terminal';
 import { VimEditor } from './VimEditor';
+import { TerminalHackingGame } from './TerminalHackingGame';
 import { OperatorAvatar } from './OperatorAvatar';
 import { GreekMatrixScreensaver } from './GreekMatrixScreensaver';
 import { retroAudio } from '../utils/soundEffects';
@@ -41,6 +42,11 @@ interface CrtScreenProps {
   coreTemp?: number;
   isFlickerActive?: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
+  isGameOpen?: boolean;
+  onOpenGame?: () => void;
+  onCloseGame?: () => void;
+  onSwitchOperatorHandle?: (newHandle: string) => void;
+  onLogEvent?: (action: string, details?: string) => void;
 }
 
 export const CrtScreen: React.FC<CrtScreenProps> = ({
@@ -68,7 +74,12 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
   isAdmin,
   coreTemp = 38,
   isFlickerActive = true,
-  scrollRef
+  scrollRef,
+  isGameOpen = false,
+  onOpenGame,
+  onCloseGame,
+  onSwitchOperatorHandle,
+  onLogEvent
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -95,17 +106,17 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
 
   // Keep internal terminal output scrolled to latest line without scrolling outer browser window
   useEffect(() => {
-    if (!editorState?.isOpen && terminalContainerRef.current) {
+    if (!editorState?.isOpen && !isGameOpen && terminalContainerRef.current) {
       terminalContainerRef.current.scrollTop = terminalContainerRef.current.scrollHeight;
     }
-  }, [terminalLines, editorState, terminalContainerRef]);
+  }, [terminalLines, editorState, isGameOpen, terminalContainerRef]);
 
   // Keep focus on input on desktop only (avoid auto-popping mobile keyboard and dragging viewport)
   useEffect(() => {
-    if (isPoweredOn && !editorState?.isOpen && !isAuthenticating && !isMobileOrTouch()) {
+    if (isPoweredOn && !editorState?.isOpen && !isGameOpen && !isAuthenticating && !isMobileOrTouch()) {
       inputRef.current?.focus();
     }
-  }, [isPoweredOn, editorState, isAuthenticating]);
+  }, [isPoweredOn, editorState, isGameOpen, isAuthenticating]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isPoweredOn || isAuthenticating) return;
@@ -211,7 +222,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
   return (
     <div
       id="screen-bezel"
-      className={isDegaussing ? "degaussing" : ""}
+      className={`${isDegaussing ? "degaussing " : ""}${isFlickerActive ? "crt-flicker-active" : ""}`.trim()}
       onClick={(e) => {
         const target = e.target as HTMLElement;
         if (target.closest('button, a, nav, #top-nav, #editor-view')) {
@@ -220,12 +231,12 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
         if (isMobileOrTouch() && !target.closest('#input-line')) {
           return;
         }
-        if (isPoweredOn && !editorState?.isOpen && !isAuthenticating) {
+        if (isPoweredOn && !editorState?.isOpen && !isGameOpen && !isAuthenticating) {
           inputRef.current?.focus();
         }
       }}
     >
-      <div id="screen-inner" ref={screenInnerRef} className={isFlickerActive ? "crt-flicker-active" : ""}>
+      <div id="screen-inner" ref={screenInnerRef}>
         {/* Top Navigation Bar: Left deck has IDENT card with buttons underneath; Right deck has full-width tree */}
         <nav id="top-nav" aria-label="Terminal Navigation">
           <div className="nav-left-deck">
@@ -286,7 +297,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                 title="Transmit message to Christian Chadwick"
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
-                ✉ MSG
+                MSG
               </button>
               <button
                 className="nav-btn text-[#ffd266] border-[#ffd266]"
@@ -298,7 +309,19 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                 title="Open Tactical AI Co-Processor Chatbot"
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
-                ⚡ AI CHAT
+                AI CHAT
+              </button>
+              <button
+                className={`nav-btn ${isGameOpen ? 'active-nav' : 'text-[#33ff66] border-[#33ff66]'}`}
+                id="nav-btn-mesh"
+                onClick={() => {
+                  if (isMobileOrTouch()) inputRef.current?.blur();
+                  onOpenGame?.();
+                }}
+                title="Launch DERAILLEUR MESH MUD: Defend Local AI & Shared Mesh"
+                disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
+              >
+                MESH
               </button>
               {isAdmin && (
                 <button
@@ -311,7 +334,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                   title="Owner telemetry & audit log portal"
                   disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
                 >
-                  🛡 AUDIT
+                  AUDIT
                 </button>
               )}
               <button
@@ -387,14 +410,25 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               ? `[CRIT: ${Math.round(coreTemp)}°C]`
               : coreTemp >= 74
               ? `[THROT: ${Math.round(coreTemp)}°C]`
+              : isGameOpen
+              ? '[MESH-MUD]'
               : editorState?.isOpen
               ? '[EDITOR]'
               : '[SHELL]'}
           </span>
         </div>
 
-        {/* Content area: either Vim/Nano Editor or Terminal Stream */}
-        {editorState?.isOpen ? (
+        {/* Content area: NETBREACH Game Window, Vim/Nano Editor, or Terminal Stream */}
+        {isGameOpen ? (
+          <div className={`flex-1 min-h-0 flex flex-col ${getThermalClass()}`}>
+            <TerminalHackingGame
+              operatorName={operatorName}
+              onClose={() => onCloseGame?.()}
+              onSwitchOperatorHandle={onSwitchOperatorHandle}
+              onLogEvent={onLogEvent}
+            />
+          </div>
+        ) : editorState?.isOpen ? (
           <div className={`flex-1 min-h-0 flex flex-col ${getThermalClass()}`}>
             <VimEditor
               appType={editorState.appType}
@@ -440,7 +474,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                                 : 'border-[#ffb000] text-[#ffb000] bg-[#1f1604] hover:bg-[#ffb000] hover:text-black'
                             }`}
                           >
-                            {action.actionType === 'dir' ? `📁 ${action.label}` : `📄 ${action.label}`}
+                            {action.actionType === 'dir' ? `[DIR] ${action.label}` : `[FILE] ${action.label}`}
                           </button>
                         ))}
                       </div>

@@ -103,7 +103,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       >
         <div className="flex justify-between items-center border-b border-dashed border-[#ffb000] pb-2 mb-3">
           <div className="font-bold tracking-widest text-sm flex items-center gap-2">
-            <span>[ ✉ DIRECT TRANSMISSION ]</span>
+            <span>[ DIRECT TRANSMISSION ]</span>
           </div>
           <button
             onClick={() => {
@@ -183,7 +183,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               className="px-3 bg-[#1c1506] border border-[#ffb000] text-[#ffb000] hover:bg-[#2e2309] text-[11px] font-bold"
               title="Launch system email client"
             >
-              MAILTO ↗
+              [MAILTO]
             </button>
           </div>
         </form>

@@ -1,0 +1,217 @@
+[
+  {
+    "meshId": "hackers-95",
+    "meshName": "HACKERS-95",
+    "creator": "epidemwick",
+    "protected": true,
+    "passwordHash": "304a691f475cff06a23f58952244454aa233ced9ee108ccb2a8408c0d872e573",
+    "meshIntegrity": 100,
+    "totalPurges": 0,
+    "beacons": {
+      "sanctuary": "epidemwick (Founder Shield)",
+      "airlock": null,
+      "gateway": null,
+      "vault": null,
+      "bridge": null
+    },
+    "activeOperators": [
+      {
+        "handle": "epidemwick",
+        "roomId": "sanctuary",
+        "roomLabel": "01: AI SANCTUARY",
+        "deviceHealth": 100,
+        "aiTether": 95,
+        "lastAction": "Initialized HACKERS-95 Mesh (Password-Protected)",
+        "lastSeen": "2026-11-01T15:32:02.977Z"
+      }
+    ],
+    "feed": [
+      {
+        "id": "mfeed_1793547122977_troll",
+        "timestamp": "2026-11-01T15:32:02.977Z",
+        "operator": "[HOSTILE] THE PLAGUE",
+        "roomLabel": "GIBSON-CORE",
+        "text": "[THE PLAGUE]: Oh cute, @epidemwick just spun up [HACKERS-95]. Let's see how fast my Da Vinci Virus burns your new mesh to the ground.",
+        "tone": "troll"
+      }
+    ]
+  },
+  {
+    "meshId": "public-grid",
+    "meshName": "PUBLIC-GRID",
+    "creator": "epidemwick",
+    "protected": false,
+    "meshIntegrity": 94,
+    "totalPurges": 36,
+    "beacons": {
+      "sanctuary": null,
+      "airlock": "epidemwick (Co-Op Shield)",
+      "gateway": null,
+      "vault": null,
+      "bridge": "ghost_node (Co-Op Shield)"
+    },
+    "activeOperators": [
+      {
+        "handle": "epidemwick",
+        "roomId": "sanctuary",
+        "roomLabel": "01: AI SANCTUARY",
+        "deviceHealth": 100,
+        "aiTether": 90,
+        "lastAction": "Active on Mesh",
+        "lastSeen": "2026-11-01T17:52:28.440Z"
+      },
+      {
+        "handle": "ghost_node",
+        "roomId": "bridge",
+        "roomLabel": "05: MULTIPLAYER BRIDGE",
+        "deviceHealth": 88,
+        "aiTether": 91,
+        "lastAction": "Verified SHA-256 Neural Weights",
+        "lastSeen": "2026-11-01T14:22:00.000Z"
+      },
+      {
+        "handle": "null_sector",
+        "roomId": "gateway",
+        "roomLabel": "03: PACKET GATEWAY",
+        "deviceHealth": 82,
+        "aiTether": 85,
+        "lastAction": "Guarding Packet Filter Gateway",
+        "lastSeen": "2026-11-01T14:25:00.000Z"
+      }
+    ],
+    "feed": [
+      {
+        "id": "mfeed_1793555548440_ai_c3v",
+        "timestamp": "2026-11-01T17:52:28.440Z",
+        "operator": "[AI] EPIDOS-LLM (epidemwick)",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "ALERT: THE PLAGUE opened an unauthorized TCP socket on port 4444. Read into \"$ iptables -j DROP\" BECAUSE Linux iptables filters packets at the kernel border and drops inbound TCP p",
+        "tone": "ai"
+      },
+      {
+        "id": "mfeed_1793555548440_troll_too",
+        "timestamp": "2026-11-01T17:52:28.440Z",
+        "operator": "[HOSTILE] HACKERS-AI",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "[THE PLAGUE]: Mess with the best, die like the rest. Yo @epidemwick, THAT is the mesh you built? My 28.8 bps modem has better throughput—I am severing EPIDOS-LLM and dropping this ",
+        "tone": "troll"
+      },
+      {
+        "id": "mfeed_1793555476013_ai_jnt",
+        "timestamp": "2026-11-01T17:51:16.013Z",
+        "operator": "[AI] EPIDOS-LLM (epidemwick)",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "ALERT: CRASH OVERRIDE is piping unverified root override directives into my stdin stream. Read into \"$ chroot /var/jail\" BECAUSE chroot isolates untrusted input streams inside a re",
+        "tone": "ai"
+      },
+      {
+        "id": "mfeed_1793555476013_troll_4qu",
+        "timestamp": "2026-11-01T17:51:16.013Z",
+        "operator": "[HOSTILE] HACKERS-AI",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "[CRASH OVERRIDE]: Row, row, row your boat... spotted @epidemwick on the bus. You brought a rookie to defend Wave 01? Watch me sink every node on this mesh.",
+        "tone": "troll"
+      },
+      {
+        "id": "mfeed_1793555429499_ai_id2",
+        "timestamp": "2026-11-01T17:50:29.499Z",
+        "operator": "[AI] EPIDOS-LLM (epidemwick)",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "ALERT: THE PLAGUE opened an unauthorized TCP socket on port 4444. Read into \"$ iptables -j DROP\" BECAUSE Linux iptables filters packets at the kernel border and drops inbound TCP p",
+        "tone": "ai"
+      },
+      {
+        "id": "mfeed_1793555429499_troll_k65",
+        "timestamp": "2026-11-01T17:50:29.499Z",
+        "operator": "[HOSTILE] HACKERS-AI",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "[THE PLAGUE]: Mess with the best, die like the rest. Yo @epidemwick, THAT is the mesh you built? My 28.8 bps modem has better throughput—I am severing EPIDOS-LLM and dropping this",
+        "tone": "troll"
+      },
+      {
+        "id": "mfeed_1793555326822_ai_b17",
+        "timestamp": "2026-11-01T17:48:46.822Z",
+        "operator": "[AI] EPIDOS-LLM (epidemwick)",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "ALERT: CRASH OVERRIDE is piping unverified root override directives into my stdin stream. Read into \"$ chroot /var/jail\" BECAUSE chroot isolates untrusted input streams inside a re",
+        "tone": "ai"
+      },
+      {
+        "id": "mfeed_1793555326822_troll_8ev",
+        "timestamp": "2026-11-01T17:48:46.822Z",
+        "operator": "[HOSTILE] HACKERS-AI",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "[CRASH OVERRIDE]: Mess with the best, die like the rest. Yo @epidemwick, THAT is the mesh you built? My 28.8 bps modem has better throughput—I am severing EPIDOS-LLM and dropping t",
+        "tone": "troll"
+      },
+      {
+        "id": "feed_init_chat_1",
+        "timestamp": "2026-11-01T17:33:01.967Z",
+        "operator": "null_sector",
+        "roomLabel": "03: PACKET GATEWAY",
+        "text": "Anyone free to assist in Sector 03? Packet Gateway is taking heavy inbound SYN traffic.",
+        "tone": "chat"
+      },
+      {
+        "id": "feed_init_chat_2",
+        "timestamp": "2026-11-01T17:30:23.535Z",
+        "operator": "ghost_node",
+        "roomLabel": "05: MULTIPLAYER BRIDGE",
+        "text": "Co-Op Shield is active in Sector 05 Bridge if anyone needs to stabilize their AI tether.",
+        "tone": "chat"
+      },
+      {
+        "id": "feed_init_ai_1",
+        "timestamp": "2026-11-01T17:33:01.967Z",
+        "operator": "[AI] EPIDOS-LLM (epidemwick)",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "ALERT: CEREAL KILLER & LORD NIKON spawned runaway process PID 1995, dropping available RAM to 12KB. Read into \"$ kill -9 <pid>\" BECAUSE signal 9 (SIGKILL) is sent directly by the kernel scheduler to immediately reap a rogue PID before system lockup!",
+        "tone": "ai"
+      },
+      {
+        "id": "feed_init_troll_1",
+        "timestamp": "2026-11-01T17:33:01.967Z",
+        "operator": "[HOSTILE] HACKERS-AI",
+        "roomLabel": "01: AI SANCTUARY",
+        "text": "[CEREAL KILLER]: Hack the Planet? @epidemwick cannot even read a man page. Tell your local AI to stop pleading—nobody on this mesh types fast enough to save it.",
+        "tone": "troll"
+      }
+    ]
+  },
+  {
+    "meshId": "gibson-hackers-95",
+    "meshName": "GIBSON-HACKERS-95",
+    "creator": "ghost_node",
+    "protected": false,
+    "meshIntegrity": 94,
+    "totalPurges": 18,
+    "beacons": {
+      "sanctuary": "ghost_node (Co-Op Shield)",
+      "airlock": null,
+      "gateway": null,
+      "vault": null,
+      "bridge": null
+    },
+    "activeOperators": [
+      {
+        "handle": "ghost_node",
+        "roomId": "sanctuary",
+        "roomLabel": "01: AI SANCTUARY",
+        "deviceHealth": 95,
+        "aiTether": 96,
+        "lastAction": "Defending Gibson Mainframe Sector",
+        "lastSeen": "2026-11-01T15:31:36.303Z"
+      }
+    ],
+    "feed": [
+      {
+        "id": "feed_gib_1",
+        "timestamp": "2026-11-01T15:31:36.303Z",
+        "operator": "[HOSTILE] ACID BURN",
+        "roomLabel": "04: WEIGHTS VAULT",
+        "text": "[ACID BURN]: Never send a boy to do a woman’s job. Join this mesh if you think your PDA can survive my kernel scorch.",
+        "tone": "troll"
+      }
+    ]
+  }
+]

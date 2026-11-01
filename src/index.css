@@ -515,15 +515,15 @@ body {
   pointer-events: none;
 }
 
-/* Authentic CRT 60Hz Phosphor Raster Micro-Flicker */
-.crt-flicker-active {
+/* Authentic CRT 60Hz Phosphor Raster Micro-Flicker on the non-interactive scanline overlay */
+#screen-bezel.crt-flicker-active::after {
   animation: crtPhosphorRaster 0.14s infinite;
 }
 
 @keyframes crtPhosphorRaster {
   0% { opacity: 0.992; }
   25% { opacity: 1; }
-  50% { opacity: 0.985; }
+  50% { opacity: 0.96; }
   75% { opacity: 1; }
   100% { opacity: 0.991; }
 }

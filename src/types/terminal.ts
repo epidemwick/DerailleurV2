@@ -58,5 +58,6 @@ export interface CommandResult {
   triggerScreensaver?: boolean;
   triggerStress?: boolean;
   triggerFlickerToggle?: boolean;
+  triggerGame?: boolean;
   outputLines: TerminalLine[];
 }

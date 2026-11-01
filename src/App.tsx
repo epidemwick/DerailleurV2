@@ -71,6 +71,8 @@ export default function App() {
     fileContent: string;
   } | null>(null);
 
+  const [isGameOpen, setIsGameOpen] = useState<boolean>(false);
+
   // Retro LED battery level: loads from sessionStorage or initializes to 94%
   const [batteryLevel, setBatteryLevel] = useState<number>(() => {
     if (typeof window !== 'undefined') {
@@ -129,7 +131,7 @@ export default function App() {
 
     const resetInactivityTimer = () => {
       clearTimeout(timer);
-      if (isPoweredOn && !isScreensaverActive) {
+      if (isPoweredOn && !isScreensaverActive && !isGameOpen) {
         timer = setTimeout(() => {
           setIsScreensaverActive(true);
         }, 60000); // 60 seconds of inactivity
@@ -158,7 +160,7 @@ export default function App() {
       window.removeEventListener('wheel', handleUserActivity);
       window.removeEventListener('touchstart', handleUserActivity);
     };
-  }, [isPoweredOn, isScreensaverActive]);
+  }, [isPoweredOn, isScreensaverActive, isGameOpen]);
 
   // Helper to log telemetry event to backend
   const logTelemetryEvent = useCallback((action: string, details?: string) => {
@@ -191,6 +193,7 @@ export default function App() {
     setCurrentDir('~');
     setActiveFile(null);
     setEditorState(null);
+    setIsGameOpen(false);
     setSystemStatus('offline');
     setAdminToken(null);
     try {
@@ -465,12 +468,20 @@ export default function App() {
       setIsFlickerActive(prev => !prev);
     }
 
+    if (res.triggerGame) {
+      setEditorState(null);
+      setIsGameOpen(true);
+      retroAudio.playHeavySwitch();
+    }
+
     if (res.nextDir) {
       setCurrentDir(res.nextDir);
       setActiveFile(null);
+      setIsGameOpen(false);
     }
 
     if (res.openEditor) {
+      setIsGameOpen(false);
       setActiveFile(res.openEditor.fileName);
       setEditorState({
         isOpen: true,
@@ -500,6 +511,7 @@ export default function App() {
     logTelemetryEvent(isPoweredOn ? 'POWER_OFF' : 'POWER_ON');
     if (isPoweredOn) {
       if (editorState?.isOpen) setEditorState(null);
+      if (isGameOpen) setIsGameOpen(false);
       setIsPoweredOn(false);
       setSystemStatus('poweroff');
     } else {
@@ -557,6 +569,7 @@ export default function App() {
   const handleNavigateDir = (targetDir: string) => {
     if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
     if (editorState?.isOpen) setEditorState(null);
+    if (isGameOpen) setIsGameOpen(false);
     retroAudio.playKeyClick();
     logTelemetryEvent('TREE_NAVIGATE_DIR', targetDir);
     handleExecuteCommand(`cd ${targetDir} && ls`);
@@ -566,6 +579,7 @@ export default function App() {
   const handleOpenFile = (dirPath: string, fileName: string) => {
     if (!isLoggedIn || isAuthenticating || !isPoweredOn) return;
     if (editorState?.isOpen) setEditorState(null);
+    if (isGameOpen) setIsGameOpen(false);
     retroAudio.playKeyClick();
     logTelemetryEvent('TREE_OPEN_FILE', `${dirPath}/${fileName}`);
     if (currentDir !== dirPath) {
@@ -695,6 +709,19 @@ export default function App() {
           coreTemp={coreTemp}
           isFlickerActive={isFlickerActive}
           scrollRef={terminalRef}
+          isGameOpen={isGameOpen}
+          onOpenGame={() => {
+            setEditorState(null);
+            setIsGameOpen(true);
+            retroAudio.playHeavySwitch();
+            logTelemetryEvent('GAME_OPENED', operatorName);
+          }}
+          onCloseGame={() => setIsGameOpen(false)}
+          onSwitchOperatorHandle={(newHandle: string) => {
+            setOperatorName(newHandle);
+            logTelemetryEvent('PLAYER_HANDLE_AUTHENTICATED', newHandle);
+          }}
+          onLogEvent={logTelemetryEvent}
         />
       </HardwareChassis>
 

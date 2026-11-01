@@ -1,0 +1,23 @@
+[
+  {
+    "handle": "epidemwick",
+    "totalScore": 4850,
+    "bestRun": 1620,
+    "nodesCracked": 19,
+    "lastActive": "2026-10-30T14:20:00.000Z"
+  },
+  {
+    "handle": "ghost_17dx",
+    "totalScore": 2420,
+    "bestRun": 980,
+    "nodesCracked": 10,
+    "lastActive": "2026-10-31T09:15:00.000Z"
+  },
+  {
+    "handle": "null_sector",
+    "totalScore": 1340,
+    "bestRun": 640,
+    "nodesCracked": 6,
+    "lastActive": "2026-10-31T19:45:00.000Z"
+  }
+]

@@ -133,7 +133,7 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
         {/* Header */}
         <div className="flex justify-between items-center border-b border-dashed border-[#5bc0be] pb-2 mb-2 sm:mb-3 shrink-0">
           <div className="font-bold tracking-widest text-xs sm:text-sm flex items-center gap-2 text-[#5bc0be]">
-            <span>[ ⚡ TACTICAL AI CO-PROCESSOR ]</span>
+            <span>[ TACTICAL AI CO-PROCESSOR ]</span>
           </div>
           <button
             onClick={() => {

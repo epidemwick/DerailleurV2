@@ -111,7 +111,7 @@ export const HardwareChassis: React.FC<HardwareChassisProps> = ({
           title="Cold Reboot System"
           aria-label="Restart system"
         >
-          <span>↻ RESTART</span>
+          <span>RESTART</span>
         </button>
 
         <button
@@ -131,7 +131,7 @@ export const HardwareChassis: React.FC<HardwareChassisProps> = ({
           title="Toggle Tactile Audio"
           aria-label={soundEnabled ? "Mute audio clicks" : "Unmute audio clicks"}
         >
-          <span>{soundEnabled ? '🔊 AUDIO' : '🔇 MUTED'}</span>
+          <span>{soundEnabled ? 'AUDIO: ON' : 'AUDIO: OFF'}</span>
         </button>
 
         {/* Realistic Retro Multi-Segment LED Battery Gauge */}

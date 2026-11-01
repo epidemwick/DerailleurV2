@@ -31,6 +31,7 @@ export function executeSingleCommand(rawCmd: string, context: CommandContext): C
       { id: uid(), type: 'help', text: "-   cd [dir]          Change directory (~, about, resume, projects, contact)" },
       { id: uid(), type: 'help', text: "-   cat [file]        Print file content to terminal" },
       { id: uid(), type: 'help', text: "-   vim / nano [file] Open file in interactive text editor" },
+      { id: uid(), type: 'help', text: "-   mesh / mud / game Launch DERAILLEUR MESH MUD (Defend Local AI & Leaderboard)" },
       { id: uid(), type: 'help', text: "-   mail / msg        Transmit direct message to Christian Chadwick" },
       ...(isOwner
         ? [{ id: uid(), type: 'help' as const, text: "-   admin / su        Owner telemetry & visitor audit log panel" }]
@@ -243,6 +244,24 @@ export function executeSingleCommand(rawCmd: string, context: CommandContext): C
       text: "[SCREENSAVER] :: Engaging Greek terminal phosphor matrix stream..."
     });
     return { triggerScreensaver: true, outputLines };
+  }
+
+  if (
+    cmd === "mesh" ||
+    cmd === "mud" ||
+    cmd === "defend" ||
+    cmd === "game" ||
+    cmd === "leaderboard" ||
+    cmd === "hack" ||
+    cmd === "breach" ||
+    cmd === "netbreach"
+  ) {
+    outputLines.push({
+      id: uid(),
+      type: 'system',
+      text: "[17DX MESH DEFENSE MUD] :: Mounting /usr/games/mesh-mud into console bus window..."
+    });
+    return { triggerGame: true, outputLines };
   }
 
   if (cmd === "mail" || cmd === "msg" || cmd === "message") {
@@ -484,6 +503,9 @@ export function executeChainedCommands(fullInput: string, context: CommandContex
     }
     if (res.triggerFlickerToggle) {
       finalResult.triggerFlickerToggle = true;
+    }
+    if (res.triggerGame) {
+      finalResult.triggerGame = true;
     }
   }
 
