@@ -15,12 +15,20 @@ export interface VirtualFolder {
 
 export type FileSystemData = Record<string, VirtualFolder>;
 
+export interface TerminalLineAction {
+  label: string;
+  actionType: 'file' | 'dir';
+  target: string;
+  dir?: string;
+}
+
 export interface TerminalLine {
   id: string;
   type: 'system' | 'prompt' | 'output' | 'error' | 'help' | 'banner';
   text?: string;
   html?: string;
   className?: string;
+  actions?: TerminalLineAction[];
 }
 
 export type SystemStatus = 'offline' | 'thinking' | 'online' | 'poweroff';

@@ -249,7 +249,8 @@ export default function App() {
     const authId = uid();
     appendLines([
       { id: uid(), type: 'prompt', text: `login as: ${handleInput || 'operator'}` },
-      { id: authId, type: 'system', text: "Authenticating operator credentials..." }
+      { id: authId, type: 'system', text: "Authenticating operator credentials..." },
+      { id: uid(), type: 'system', text: "----------------------------------------------------------------" }
     ]);
 
     let locationText = "Philadelphia, Pennsylvania";
@@ -320,26 +321,18 @@ export default function App() {
     setTimeout(() => {
       const nowStr = new Date().toLocaleString();
       const summaryLines: TerminalLine[] = [
-        { id: uid(), type: 'system', text: "" },
         { id: uid(), type: 'system', text: `λ Operator: ${displayHandle}` },
         { id: uid(), type: 'system', text: `λ Host: Derailleur v2 Handheld` },
         { id: uid(), type: 'system', text: `λ Time: ${nowStr}` },
         { id: uid(), type: 'system', text: `λ Location: ${locationText}` },
         { id: uid(), type: 'system', text: `λ Weather: ${fullWeatherString}` },
         { id: uid(), type: 'system', text: `λ Status: Online` },
-        { id: uid(), type: 'system', text: "" },
         { id: uid(), type: 'system', text: "----------------------------------------------------------------" },
-        { id: uid(), type: 'help', text: "--- ePidOS Terminal Handheld Help ---" },
-        { id: uid(), type: 'help', text: "-   ls                List files in current directory" },
-        { id: uid(), type: 'help', text: "-   cd [dir]          Change directory (~, about, resume, projects, contact)" },
-        { id: uid(), type: 'help', text: "-   cat [file]        Print file content to terminal" },
-        { id: uid(), type: 'help', text: "-   vim / nano [file] Open file in interactive text editor" },
-        { id: uid(), type: 'help', text: "-   mail / msg        Transmit direct message to Christian Chadwick" },
-        ...(isOwner ? [{ id: uid(), type: 'help' as const, text: "-   admin / su        Owner telemetry & visitor audit log panel" }] : []),
-        { id: uid(), type: 'help', text: "-   screensaver       Activate Greek terminal matrix rain screensaver" },
-        { id: uid(), type: 'help', text: "-   degauss           Demagnetize CRT display coil" },
-        { id: uid(), type: 'help', text: "-   pwd               Print working directory path" },
-        { id: uid(), type: 'help', text: "-   clear             Clear terminal display" },
+        {
+          id: uid(),
+          type: 'help',
+          text: "Type 'help' to get commands, or select buttons on the navbar and the file tree."
+        },
         { id: uid(), type: 'system', text: "----------------------------------------------------------------" }
       ];
 
@@ -566,7 +559,7 @@ export default function App() {
     if (editorState?.isOpen) setEditorState(null);
     retroAudio.playKeyClick();
     logTelemetryEvent('TREE_NAVIGATE_DIR', targetDir);
-    handleExecuteCommand(`cd ${targetDir}`);
+    handleExecuteCommand(`cd ${targetDir} && ls`);
   };
 
   // Direct click on file in tree
@@ -633,11 +626,15 @@ export default function App() {
       setTerminalLines([
         { id: uid(), type: 'system', text: "DERAILLEUR v2 // BIOS REV 4.09 (C) CHADHAWK CORPS." },
         { id: uid(), type: 'system', text: "Mounting /dev/epidos0 on / ... READONLY" },
+        { id: uid(), type: 'system', text: "----------------------------------------------------------------" },
+        { id: uid(), type: 'system', text: "Authenticating operator credentials..." },
+        { id: uid(), type: 'system', text: "----------------------------------------------------------------" },
         { id: uid(), type: 'system', text: "λ Operator: epidemwick [AUTOSTART]" },
         { id: uid(), type: 'system', text: "λ Host: Derailleur v2 Handheld" },
         { id: uid(), type: 'system', text: "λ Status: Online" },
         { id: uid(), type: 'system', text: "----------------------------------------------------------------" },
-        { id: uid(), type: 'help', text: "Type 'help' or click top nav shortcuts to explore." }
+        { id: uid(), type: 'help', text: "Type 'help' to get commands, or select buttons on the navbar and the file tree." },
+        { id: uid(), type: 'system', text: "----------------------------------------------------------------" }
       ]);
       playCrtPowerOnAnimation();
     } else {

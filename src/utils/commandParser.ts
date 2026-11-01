@@ -302,16 +302,32 @@ export function executeSingleCommand(rawCmd: string, context: CommandContext): C
 
   if (cmd === "ls") {
     const items: string[] = [];
+    const actions: Array<{ label: string; actionType: 'file' | 'dir'; target: string; dir?: string }> = [];
+
     dirObj.folders.forEach(f => {
       items.push(`<span class="ls-dir text-[#5bc0be] font-bold">${f}/</span>`);
+      const targetPath = context.currentDir === '~' ? `~/${f}` : f;
+      actions.push({
+        label: `${f}/`,
+        actionType: 'dir',
+        target: targetPath,
+        dir: context.currentDir
+      });
     });
     Object.keys(dirObj.files).forEach(file => {
       items.push(`<span class="ls-file text-[#ffb000]">${file}</span>`);
+      actions.push({
+        label: file,
+        actionType: 'file',
+        target: file,
+        dir: context.currentDir
+      });
     });
     outputLines.push({
       id: uid(),
       type: 'output',
-      html: items.length > 0 ? items.join("    ") : "(empty directory)"
+      html: items.length > 0 ? items.join("    ") : "(empty directory)",
+      actions: actions.length > 0 ? actions : undefined
     });
     return { outputLines };
   }

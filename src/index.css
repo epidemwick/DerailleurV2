@@ -1153,8 +1153,8 @@ body {
 
 .line {
   white-space: pre-wrap;
-  word-break: break-all;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: break-word;
   max-width: 100%;
   box-sizing: border-box;
   margin-bottom: 3px;
@@ -1258,8 +1258,8 @@ body {
   font-size: 12.5px;
   line-height: 1.45;
   white-space: pre-wrap;
-  word-break: break-all;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: break-word;
   scrollbar-width: thin;
   scrollbar-color: var(--text-dim) #120d02;
   box-sizing: border-box;
@@ -1430,9 +1430,20 @@ body {
     letter-spacing: 0.5px !important;
   }
 
-  .flip-clock {
-    transform: scale(0.72) !important;
-    transform-origin: right center !important;
+  .flip-clock-glass-housing {
+    padding: 4px 6px !important;
+    gap: 3px !important;
+  }
+
+  .flip-clock-glass-housing .flip-card {
+    min-width: 24px !important;
+    height: 26px !important;
+    font-size: 10.5px !important;
+    padding: 2px 4px !important;
+  }
+
+  .flip-clock-glass-housing .flip-sep {
+    font-size: 10px !important;
   }
 
   #screen-bezel {

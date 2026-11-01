@@ -1,5 +1,73 @@
 [
   {
+    "id": "sess_dvtv8jv",
+    "operatorName": "chad",
+    "startTime": "2026-11-01T12:58:54.084Z",
+    "lastActive": "2026-11-01T12:58:54.084Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-11-01T12:58:54.084Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      }
+    ]
+  },
+  {
+    "id": "sess_z84yc0p",
+    "operatorName": "visitor",
+    "startTime": "2026-11-01T12:47:34.110Z",
+    "lastActive": "2026-11-01T12:47:36.089Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-11-01T12:47:34.110Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-11-01T12:47:36.086Z",
+        "action": "TREE_NAVIGATE_DIR",
+        "details": "~/resume"
+      },
+      {
+        "timestamp": "2026-11-01T12:47:36.089Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/resume && ls"
+      }
+    ]
+  },
+  {
+    "id": "sess_1dk10ea",
+    "operatorName": "visitor",
+    "startTime": "2026-11-01T12:46:00.696Z",
+    "lastActive": "2026-11-01T12:46:06.988Z",
+    "location": "North Charleston, South Carolina",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+    "ip": "127.0.0.1",
+    "events": [
+      {
+        "timestamp": "2026-11-01T12:46:00.696Z",
+        "action": "SESSION_INITIALIZED",
+        "details": "Weather Mode: Mountain Biking & Craft Beer Mode"
+      },
+      {
+        "timestamp": "2026-11-01T12:46:06.985Z",
+        "action": "TREE_NAVIGATE_DIR",
+        "details": "~/resume"
+      },
+      {
+        "timestamp": "2026-11-01T12:46:06.988Z",
+        "action": "COMMAND_EXECUTED",
+        "details": "cd ~/resume && ls"
+      }
+    ]
+  },
+  {
     "id": "sess_24duv4g",
     "operatorName": "guest",
     "startTime": "2026-10-31T13:15:12.967Z",

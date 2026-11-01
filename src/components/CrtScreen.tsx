@@ -82,19 +82,27 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
   // Keep screen text 100% crisp and readable (thermal metrics available in commands)
   const getThermalClass = () => '';
 
-  // Reset scroll to top whenever directory or active file changes
+  const isMobileOrTouch = () =>
+    typeof window !== 'undefined' &&
+    (window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches);
+
+  // Reset horizontal scroll whenever directory or active file changes
   useEffect(() => {
     if (screenInnerRef.current) {
       screenInnerRef.current.scrollLeft = 0;
     }
-    if (terminalContainerRef.current) {
-      terminalContainerRef.current.scrollTop = 0;
-    }
   }, [currentDir, activeFile, editorState]);
 
-  // Keep focus on input unless editor is open
+  // Keep internal terminal output scrolled to latest line without scrolling outer browser window
   useEffect(() => {
-    if (isPoweredOn && !editorState?.isOpen && !isAuthenticating) {
+    if (!editorState?.isOpen && terminalContainerRef.current) {
+      terminalContainerRef.current.scrollTop = terminalContainerRef.current.scrollHeight;
+    }
+  }, [terminalLines, editorState, terminalContainerRef]);
+
+  // Keep focus on input on desktop only (avoid auto-popping mobile keyboard and dragging viewport)
+  useEffect(() => {
+    if (isPoweredOn && !editorState?.isOpen && !isAuthenticating && !isMobileOrTouch()) {
       inputRef.current?.focus();
     }
   }, [isPoweredOn, editorState, isAuthenticating]);
@@ -193,11 +201,25 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
     { dir: "~/contact", name: "contact/" }
   ];
 
+  const handleNavCommand = (cmd: string) => {
+    if (isMobileOrTouch()) {
+      inputRef.current?.blur();
+    }
+    onExecuteCommand(cmd);
+  };
+
   return (
     <div
       id="screen-bezel"
       className={isDegaussing ? "degaussing" : ""}
-      onClick={() => {
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('button, a, nav, #top-nav, #editor-view')) {
+          return;
+        }
+        if (isMobileOrTouch() && !target.closest('#input-line')) {
+          return;
+        }
         if (isPoweredOn && !editorState?.isOpen && !isAuthenticating) {
           inputRef.current?.focus();
         }
@@ -225,7 +247,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className={`nav-btn ${isAboutActive ? 'active-nav' : ''}`}
                 id="nav-btn-about"
-                onClick={() => onExecuteCommand('cd ~/about && ls')}
+                onClick={() => handleNavCommand('cd ~/about && ls')}
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
                 ABOUT
@@ -233,7 +255,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className={`nav-btn ${isResumeActive ? 'active-nav' : ''}`}
                 id="nav-btn-resume"
-                onClick={() => onExecuteCommand('cd ~/resume && ls')}
+                onClick={() => handleNavCommand('cd ~/resume && ls')}
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
                 RESUME
@@ -241,7 +263,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className={`nav-btn ${isProjectsActive ? 'active-nav' : ''}`}
                 id="nav-btn-projects"
-                onClick={() => onExecuteCommand('cd ~/projects && ls')}
+                onClick={() => handleNavCommand('cd ~/projects && ls')}
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
                 PROJECTS
@@ -249,7 +271,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className={`nav-btn ${isContactActive ? 'active-nav' : ''}`}
                 id="nav-btn-contact"
-                onClick={() => onExecuteCommand('cd ~/contact && ls')}
+                onClick={() => handleNavCommand('cd ~/contact && ls')}
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
                 CONTACT
@@ -257,7 +279,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className="nav-btn text-[#5bc0be] border-[#5bc0be]"
                 id="nav-btn-msg"
-                onClick={onOpenContactModal}
+                onClick={() => {
+                  if (isMobileOrTouch()) inputRef.current?.blur();
+                  onOpenContactModal?.();
+                }}
                 title="Transmit message to Christian Chadwick"
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
@@ -266,7 +291,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className="nav-btn text-[#ffd266] border-[#ffd266]"
                 id="nav-btn-ai-chat"
-                onClick={onOpenAiChatModal}
+                onClick={() => {
+                  if (isMobileOrTouch()) inputRef.current?.blur();
+                  onOpenAiChatModal?.();
+                }}
                 title="Open Tactical AI Co-Processor Chatbot"
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
@@ -276,7 +304,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                 <button
                   className="nav-btn text-[#33ff66] border-[#33ff66]"
                   id="nav-btn-audit"
-                  onClick={onOpenAdminModal}
+                  onClick={() => {
+                    if (isMobileOrTouch()) inputRef.current?.blur();
+                    onOpenAdminModal?.();
+                  }}
                   title="Owner telemetry & audit log portal"
                   disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
                 >
@@ -286,7 +317,7 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
               <button
                 className="nav-btn"
                 id="nav-btn-clear"
-                onClick={() => onExecuteCommand('clear')}
+                onClick={() => handleNavCommand('clear')}
                 disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
               >
                 CLEAR
@@ -297,7 +328,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
           <div className="nav-tree" id="nav-tree" aria-label="Filesystem Tree">
             <button
               className={`tree-item tree-folder w-full text-left ${currentDir === '~' && !activeFile ? 'tree-active' : ''}`}
-              onClick={() => onNavigateDir('~')}
+              onClick={() => {
+                if (isMobileOrTouch()) inputRef.current?.blur();
+                onNavigateDir('~');
+              }}
               disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
             >
               λ ~/
@@ -311,7 +345,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                 <div key={f.dir}>
                   <button
                     className={`tree-item tree-folder w-full text-left ${isFolderSelected ? 'tree-active' : ''}`}
-                    onClick={() => onNavigateDir(f.dir)}
+                    onClick={() => {
+                      if (isMobileOrTouch()) inputRef.current?.blur();
+                      onNavigateDir(f.dir);
+                    }}
                     disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
                   >
                     λ ├─ {f.name}
@@ -324,7 +361,10 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                         <button
                           key={file}
                           className={`tree-item w-full text-left ${isFileSelected ? 'tree-active' : ''}`}
-                          onClick={() => onOpenFile(f.dir, file)}
+                          onClick={() => {
+                            if (isMobileOrTouch()) inputRef.current?.blur();
+                            onOpenFile(f.dir, file);
+                          }}
                           disabled={!isLoggedIn || isAuthenticating || !isPoweredOn}
                         >
                           λ │  {branch} {file}
@@ -376,8 +416,39 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                   key={line.id}
                   className={`line ${line.className || ''}`}
                 >
-                  {line.html ? (
+                  {line.actions && line.actions.length > 0 ? (
+                    <div className="my-1 p-1.5 border border-[#4a3508] bg-[#161004]/90 rounded-sm">
+                      <div className="text-[11px] text-[#9e6b00] mb-1.5 font-mono">
+                        [DIRECTORY: {line.actions[0]?.dir || currentDir}] — Select a file or folder below (or in the file tree) to open:
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {line.actions.map(action => (
+                          <button
+                            key={`${line.id}-${action.label}`}
+                            type="button"
+                            onClick={() => {
+                              if (isMobileOrTouch()) inputRef.current?.blur();
+                              if (action.actionType === 'dir') {
+                                onNavigateDir(action.target);
+                              } else {
+                                onOpenFile(action.dir || currentDir, action.target);
+                              }
+                            }}
+                            className={`px-2 py-1 text-xs font-mono font-bold border rounded-sm cursor-pointer transition-colors ${
+                              action.actionType === 'dir'
+                                ? 'border-[#5bc0be] text-[#5bc0be] bg-[#0d1b1e]/80 hover:bg-[#5bc0be] hover:text-black'
+                                : 'border-[#ffb000] text-[#ffb000] bg-[#1f1604] hover:bg-[#ffb000] hover:text-black'
+                            }`}
+                          >
+                            {action.actionType === 'dir' ? `📁 ${action.label}` : `📄 ${action.label}`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : line.html ? (
                     <span dangerouslySetInnerHTML={{ __html: line.html }} />
+                  ) : line.text && /^[-=]{10,}$/.test(line.text.trim()) ? (
+                    <span className="block whitespace-nowrap overflow-hidden">{line.text}</span>
                   ) : (
                     <span>{line.text}</span>
                   )}
@@ -386,7 +457,14 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
             </div>
 
             {/* Prompt line */}
-            <div id="input-line">
+            <div
+              id="input-line"
+              onClick={() => {
+                if (isPoweredOn && !editorState?.isOpen && !isAuthenticating) {
+                  inputRef.current?.focus();
+                }
+              }}
+            >
               <label htmlFor="cmd-input" id="prompt-label">
                 {!isLoggedIn
                   ? 'login as:'
@@ -401,7 +479,6 @@ export const CrtScreen: React.FC<CrtScreenProps> = ({
                 onKeyDown={handleKeyDown}
                 autoComplete="off"
                 spellCheck={false}
-                autoFocus
                 disabled={!isPoweredOn || isAuthenticating}
                 aria-label="Terminal command prompt"
               />

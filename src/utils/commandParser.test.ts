@@ -45,17 +45,19 @@ test('command parser handles pwd', () => {
   assert.equal(res.outputLines[0].text, '/home/chadwick');
 });
 
-test('command parser handles ls in root and subdirectories', () => {
+test('command parser handles ls in root and subdirectories with interactive actions', () => {
   const resRoot = executeSingleCommand('ls', baseContext);
   assert.equal(resRoot.outputLines.length, 1);
   assert.ok(resRoot.outputLines[0].html?.includes('about/'));
   assert.ok(resRoot.outputLines[0].html?.includes('resume/'));
+  assert.ok(resRoot.outputLines[0].actions?.some(a => a.actionType === 'dir' && a.target === '~/about'));
 
   const resumeContext: CommandContext = { ...baseContext, currentDir: '~/resume' };
   const resResume = executeSingleCommand('ls', resumeContext);
   assert.ok(resResume.outputLines[0].html?.includes('experience.txt'));
   assert.ok(resResume.outputLines[0].html?.includes('education.txt'));
   assert.ok(resResume.outputLines[0].html?.includes('skills.txt'));
+  assert.ok(resResume.outputLines[0].actions?.some(a => a.actionType === 'file' && a.target === 'experience.txt'));
 });
 
 test('command parser handles cd and command chaining', () => {
